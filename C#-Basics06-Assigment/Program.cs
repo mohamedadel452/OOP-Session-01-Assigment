@@ -46,21 +46,29 @@
     #region 1. Create a DeliveryAddress struct
     public struct DeliveryAddress
     {
+
+        #region Fields And Properties
         public string City;
         public string Street;
         public int BuildingNumber;
 
+        #endregion
+
+        #region Constructors
         public DeliveryAddress(string city, string street, int buildingNumber)
         {
             City = city;
             Street = street;
             BuildingNumber = buildingNumber;
         }
+        #endregion
 
+        #region Methods
         public string GetFullAddress()
         {
             return $"{BuildingNumber} {Street}, {City}";
         }
+        #endregion
     }
     #endregion
 
@@ -68,6 +76,8 @@
     #region 2.  Create Shipment struct
     public struct Shipment
     {
+
+        #region Fields And Properties
         private string trackingCode;
         private string description;
         private double weight;
@@ -126,6 +136,41 @@
         {
             get { return DeliveryFee + (decimal)(Weight * 5); }
         }
+
+        #endregion
+
+
+        #region Constructors
+
+        // Constructor 1: uses default values
+        public Shipment(string trackingCode)
+        {
+            // Must initialize all fields in struct before calling property setters
+            this.trackingCode = string.Empty;
+            this.description = "Unknown";
+            this.weight = 1.0;
+            this.deliveryFee = 50.0m;
+            this.Destination = new DeliveryAddress("Unknown City", "Unknown Street", 0);
+
+            this.TrackingCode = trackingCode;
+        }
+
+        // Constructor 2: specific values
+        public Shipment(string trackingCode, string description, double weight, decimal deliveryFee, DeliveryAddress destination)
+        {
+            this.trackingCode = string.Empty;
+            this.description = "Unknown";
+            this.weight = 1.0;
+            this.deliveryFee = 50.0m;
+            this.Destination = destination;
+
+            this.TrackingCode = trackingCode;
+            this.Description = description;
+            this.Weight = weight;
+            this.DeliveryFee = deliveryFee;
+        }
+
+        #endregion
 
     }
 
