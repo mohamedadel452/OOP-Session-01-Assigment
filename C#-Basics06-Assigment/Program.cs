@@ -280,9 +280,6 @@
     }
 
 
-
-
-
     #endregion
 
 
@@ -295,31 +292,126 @@
         {
             Console.WriteLine(" Smart Delivery Management System \n");
 
-            #region Read data form user 
-            Console.WriteLine("please enter this data  ");
+            
+            #region Part 06 : Create Full App
            
+            // a. Create a DeliveryCenter
+            DeliveryCenter center = new DeliveryCenter();
+
+
+             #region Read data for three shipments and add them
+            // b & c. Read data for three shipments and add them
+            for (int i = 1; i <= 3; i++)
+            {
+                Console.WriteLine($"--- Enter Shipment {i} Data ---");
+                Console.Write("Tracking Code: ");
+                string code = Console.ReadLine();
+
+                Console.Write("Description: ");
+                string desc = Console.ReadLine();
+
+                Console.Write("Weight: ");
+                double.TryParse(Console.ReadLine(), out double weight);
+
+                Console.Write("Delivery Fee: ");
+                decimal.TryParse(Console.ReadLine(), out decimal fee);
+
+                Console.Write("City: ");
+                string _city = Console.ReadLine();
+
+                Console.Write("Street: ");
+                string _street = Console.ReadLine();
+
+                int _buildNum;
+                while (true)
+                {
+                    Console.Write("Building Number: ");
+                    if (int.TryParse(Console.ReadLine(), out _buildNum))
+                    {
+                        break;
+                    }
+                    Console.WriteLine("Invalid input. Please enter a valid Number.");
+                }
+
+            
+
+                DeliveryAddress address = new DeliveryAddress(_city, _street, _buildNum);
+                Shipment newShipment = new Shipment(code, desc, weight, fee, address);
+
+                bool added = center.AddShipment(newShipment);
+                if (added)
+                    Console.WriteLine("Shipment added successfully.\n");
+                else
+                    Console.WriteLine("Failed to add shipment. Center might be full.\n");
+            }
+
+            #endregion
+
+             #region Print the three shipments using the integer indexer
+
+            // d. Print the three shipments using the integer indexer
+            Console.WriteLine("=== All Shipments ===");
+            for (int i = 0; i < 3; i++)
+            {
+                Shipment s = center[i];
+                //if the tracingcode is null or empty it will not be shipment 
+                if (!string.IsNullOrEmpty(s.TrackingCode))
+                {
+                    s.PrintShipment();
+                }
+            }
+
+            #endregion
+
+             #region Ask the user to enter a tracking code and search
+            // e & f & g. Ask the user to enter a tracking code and search
+            Console.WriteLine();
+            Console.Write("Enter a tracking code to search: ");
+            string searchCode = Console.ReadLine();
+            Shipment foundShipment = center[searchCode];
+
+            if (!string.IsNullOrEmpty(foundShipment.TrackingCode))
+            {
+                Console.WriteLine($"\nShipment found: {foundShipment.TrackingCode} - {foundShipment.Description}");
+            }
+            else
+            {
+                Console.WriteLine("\nShipment not found.");
+            }
+
+            #endregion
+
+            #endregion
+
+            #region Part 02 : Q1
+
+            #region Add Data From User On Part 02 : Q1
+            Console.WriteLine("Part 02 : Q1");
+            Console.WriteLine();
+            Console.WriteLine("please enter this data  ");
+
             Console.Write("City: ");
-            string ?city = Console.ReadLine();
+            string? city = Console.ReadLine();
 
             Console.Write("Street: ");
-            string ?street = Console.ReadLine();
+            string? street = Console.ReadLine();
 
             int buildNum;
             while (true)
             {
                 Console.Write("Building Number: ");
-              
+
                 if (int.TryParse(Console.ReadLine(), out buildNum))
                 {
                     break;
                 }
-                
+
                 Console.WriteLine("Invalid input. Please enter a valid number.");
             }
             #endregion
 
-            #region Part 02 : Q1
-            // Demonstrate the DeliveryAddress struct copy behavior
+
+            #region Demonstrate the DeliveryAddress struct copy behavior
             Console.WriteLine("\n=== Struct Copy Test ===");
             DeliveryAddress originalAddress = new DeliveryAddress(city, street, buildNum);
             DeliveryAddress copiedAddress = originalAddress; // Copying a struct
@@ -327,7 +419,7 @@
             Console.WriteLine();
 
             //Print the two variable to see it before modificatio
-            Console.WriteLine("Print the two variable to see it before modification "); 
+            Console.WriteLine("Print the two variable to see it before modification ");
             Console.WriteLine($"Original Address: {originalAddress.GetFullAddress()}");
             Console.WriteLine($"Copied Address: {copiedAddress.GetFullAddress()}");
 
@@ -341,20 +433,14 @@
             Console.WriteLine("Print the two variable to see it after modification ");
             Console.WriteLine($"Original Address: {originalAddress.GetFullAddress()}");
             Console.WriteLine($"Copied Address: {copiedAddress.GetFullAddress()}");
-           
+
             Console.WriteLine();
-            
+
             Console.WriteLine("As shown, modifying the copied address did not affect the original address because structs are passed by value.");
 
             #endregion
 
-
-            
-
-
-
-
-
+            #endregion
 
 
         }
