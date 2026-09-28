@@ -65,6 +65,73 @@
     #endregion
 
 
+    #region 2.  Create Shipment struct
+    public struct Shipment
+    {
+        private string trackingCode;
+        private string description;
+        private double weight;
+        private decimal deliveryFee;
+
+        // Destination: public read/write property.
+        public DeliveryAddress Destination { get; set; }
+
+        // TrackingCode: read-only from outside the struct.
+        // It's set in the constructor. We provide a public getter and private setter.
+        public string TrackingCode
+        {
+            get { return trackingCode; }
+            private set
+            {
+                if (!string.IsNullOrWhiteSpace(value))
+                    trackingCode = value;
+            }
+        }
+
+        // Description: read/write property with validation.
+        public string Description
+        {
+            get { return description; }
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(value))
+                    description = value;
+            }
+        }
+
+        // Weight: read/write property with validation.
+        public double Weight
+        {
+            get { return weight; }
+            set
+            {
+                if (value > 0)
+                    weight = value;
+            }
+        }
+
+        // DeliveryFee: public getter and private setter.
+        public decimal DeliveryFee
+        {
+            get { return deliveryFee; }
+            private set
+            {
+                if (value > 0)
+                    deliveryFee = value;
+            }
+        }
+
+        // EstimatedCost: a calculated property
+        public decimal EstimatedCost
+        {
+            get { return DeliveryFee + (decimal)(Weight * 5); }
+        }
+
+    }
+
+    #endregion
+
+
     class Program
     {
 
@@ -124,6 +191,15 @@
             Console.WriteLine("As shown, modifying the copied address did not affect the original address because structs are passed by value.");
 
             #endregion
+
+
+            #region Part 02 : Q2
+
+
+
+            #endregion
+
+
 
 
 
