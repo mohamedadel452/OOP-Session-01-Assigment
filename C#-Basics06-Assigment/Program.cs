@@ -200,6 +200,74 @@
     #endregion
 
 
+    #region 3.  Create DeliveryCenter  struct
+    public struct DeliveryCenter
+    {
+
+
+        #region Fileds And Properties
+        private Shipment[] _shipments;
+
+        // Lazy initialization property to ensure the array exists
+        private Shipment[] Shipments
+        {
+            get
+            {
+                if (_shipments == null)
+                    _shipments = new Shipment[10];
+                return _shipments;
+            }
+        }
+
+        #endregion
+
+
+        #region Indexer
+
+        // Integer indexer
+        public Shipment this[int index]
+        {
+            get
+            {
+                if (index >= 0 && index < Shipments.Length)
+                    return Shipments[index];
+                return default(Shipment);
+            }
+            set
+            {
+                if (index >= 0 && index < Shipments.Length)
+                    Shipments[index] = value;
+            }
+        }
+
+        // String indexer (search by tracking code)
+        public Shipment this[string trackingCode]
+        {
+            get
+            {
+                foreach (var shipment in Shipments)
+                {
+                    if (shipment.TrackingCode == trackingCode)
+                        return shipment;
+                }
+                return default(Shipment);
+            }
+        }
+
+        #endregion
+
+
+    }
+
+
+
+
+
+    #endregion
+
+
+
+
     class Program
     {
 
@@ -261,11 +329,7 @@
             #endregion
 
 
-            #region Part 02 : Q2
-
-
-
-            #endregion
+            
 
 
 
