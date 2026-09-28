@@ -43,21 +43,95 @@
     #endregion
 
 
+    #region 1. Create a DeliveryAddress struct
+    public struct DeliveryAddress
+    {
+        public string City;
+        public string Street;
+        public int BuildingNumber;
+
+        public DeliveryAddress(string city, string street, int buildingNumber)
+        {
+            City = city;
+            Street = street;
+            BuildingNumber = buildingNumber;
+        }
+
+        public string GetFullAddress()
+        {
+            return $"{BuildingNumber} {Street}, {City}";
+        }
+    }
+    #endregion
 
 
     class Program
     {
 
-        static void Main(string [] args)
+        static void Main(string[] args)
         {
             Console.WriteLine(" Smart Delivery Management System \n");
+
+            #region Read data form user 
+            Console.WriteLine("please enter this data  ");
+           
+            Console.Write("City: ");
+            string ?city = Console.ReadLine();
+
+            Console.Write("Street: ");
+            string ?street = Console.ReadLine();
+
+            int buildNum;
+            while (true)
+            {
+                Console.Write("Building Number: ");
+              
+                if (int.TryParse(Console.ReadLine(), out buildNum))
+                {
+                    break;
+                }
+                
+                Console.WriteLine("Invalid input. Please enter a valid number.");
+            }
+            #endregion
+
+            #region Part 02 : Q1
+            // Demonstrate the DeliveryAddress struct copy behavior
+            Console.WriteLine("\n=== Struct Copy Test ===");
+            DeliveryAddress originalAddress = new DeliveryAddress(city, street, buildNum);
+            DeliveryAddress copiedAddress = originalAddress; // Copying a struct
+
+            Console.WriteLine();
+
+            //Print the two variable to see it before modificatio
+            Console.WriteLine("Print the two variable to see it before modification "); 
+            Console.WriteLine($"Original Address: {originalAddress.GetFullAddress()}");
+            Console.WriteLine($"Copied Address: {copiedAddress.GetFullAddress()}");
+
+            Console.WriteLine();
+
+            //modify the data of the copy to see what will happen 
+            copiedAddress.Street = "Makram Ebeid Street";
+            copiedAddress.BuildingNumber = 20;
+
+            //Print the two variable to see it after modification
+            Console.WriteLine("Print the two variable to see it after modification ");
+            Console.WriteLine($"Original Address: {originalAddress.GetFullAddress()}");
+            Console.WriteLine($"Copied Address: {copiedAddress.GetFullAddress()}");
+           
+            Console.WriteLine();
+            
+            Console.WriteLine("As shown, modifying the copied address did not affect the original address because structs are passed by value.");
+
+            #endregion
+
+
+
 
 
         }
 
 
+
     }
-
-
-
 }
