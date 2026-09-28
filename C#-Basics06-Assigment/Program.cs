@@ -139,7 +139,6 @@
 
         #endregion
 
-
         #region Constructors
 
         // Constructor 1: uses default values
@@ -171,6 +170,30 @@
         }
 
         #endregion
+
+        #region Methods
+        // UpdateDeliveryFee Method
+        public void UpdateDeliveryFee(decimal newFee)
+        {
+            if (newFee > 0)
+            {
+                this.DeliveryFee = newFee;
+            }
+        }
+
+        // PrintShipment Method
+        public void PrintShipment()
+        {
+            Console.WriteLine($"Tracking Code: {TrackingCode}");
+            Console.WriteLine($"Description: {Description}");
+            Console.WriteLine($"Weight: {Weight} KG");
+            Console.WriteLine($"Delivery Fee: {DeliveryFee} EGP");
+            Console.WriteLine($"Destination: {Destination.GetFullAddress()}");
+            Console.WriteLine($"Estimated Cost: {EstimatedCost} EGP");
+            Console.WriteLine(new string('-', 30));
+        }
+
+        #endregion 
 
     }
 
