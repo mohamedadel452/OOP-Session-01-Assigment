@@ -257,6 +257,26 @@
         #endregion
 
 
+        #region Methods
+        // AddShipment Method
+        public bool AddShipment(Shipment shipment)
+        {
+            for (int i = 0; i < Shipments.Length; i++)
+            {
+                // We check if the tracking code is null, meaning this slot is empty 
+                // because it's a struct and defaults to all nulls/zeros.
+                if (string.IsNullOrEmpty(Shipments[i].TrackingCode))
+                {
+                    Shipments[i] = shipment;
+                    return true;
+                }
+            }
+            return false; // Delivery center is full
+        }
+        #endregion
+
+
+
     }
 
 
