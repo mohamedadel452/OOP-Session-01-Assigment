@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OOP Session 01: دليل الغوص العميق (C# / .NET)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F2F4F6;--card:#FFFFFF;--ink:#14213D;--muted:#586373;--line:#D5DAE1;
+  --bad:#B3261E;--bad-bg:#FBEAE8;
+  --good:#0B7A69;--good-bg:#E3F3EF;
+  --warn:#8A5300;--warn-bg:#FBF1DD;
+  --myth:#4B3F91;--myth-bg:#ECE9F8;
+  --idea:#1F5FA8;--idea-bg:#E6EFFA;
+  --code:#0F1B2D;--code-ink:#E6EDF7;
+}
+:root{color-scheme:light dark}
+@media (prefers-color-scheme:dark){
+  :root{
+    --paper:#0D1422;--card:#131C2E;--ink:#E8EDF5;--muted:#9AA6B8;--line:#26324A;
+    --bad:#FF8F86;--bad-bg:#2B1618;
+    --good:#4FD1B8;--good-bg:#10261F;
+    --warn:#F0B95A;--warn-bg:#2A2010;
+    --myth:#B3A8F5;--myth-bg:#1E1B36;
+    --idea:#7DB6F2;--idea-bg:#122238;
+    --code:#0A101C;--code-ink:#E6EDF7;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:1rem}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"IBM Plex Sans Arabic","Segoe UI",Tahoma,Arial,sans-serif;
+  font-size:17px;line-height:1.95}
+.wrap{display:grid;grid-template-columns:14.5rem minmax(0,48rem);gap:3rem;
+  max-width:68rem;margin:0 auto;padding:2rem 1.25rem 5rem}
+nav.toc{position:sticky;top:1rem;align-self:start;font-size:.9rem;line-height:1.7;
+  max-height:calc(100vh - 2rem);overflow:auto;padding-inline-end:.5rem}
+nav.toc b{display:block;margin-bottom:.5rem;color:var(--muted);font-weight:500}
+nav.toc a{display:block;padding:.2rem .6rem;color:var(--ink);text-decoration:none;
+  border-inline-start:2px solid var(--line)}
+nav.toc a:hover,nav.toc a:focus-visible{border-color:var(--ink);outline:none;background:var(--card)}
+nav.toc a span{font-family:Consolas,Menlo,monospace;color:var(--muted);margin-inline-end:.4rem;
+  direction:ltr;unicode-bidi:isolate}
+main{min-width:0}
+h1{font-size:2.1rem;line-height:1.35;margin:.2rem 0 .6rem;font-weight:700}
+h2{font-size:1.55rem;line-height:1.4;margin:0;font-weight:700}
+h3{font-size:1.15rem;margin:2.2rem 0 .4rem;font-weight:700}
+p{margin:.7rem 0}
+.lede{font-size:1.1rem;color:var(--muted);margin-bottom:1.5rem}
+section{margin-top:3.5rem;padding-top:2rem;border-top:1px solid var(--line)}
+.risk-h{display:flex;align-items:baseline;gap:.9rem;margin-bottom:1rem;flex-wrap:wrap}
+.tag{font-size:.9rem;border:1.5px solid var(--ink);padding:.05rem .6rem;border-radius:4px;flex:none}
+.en{direction:ltr;unicode-bidi:isolate;font-weight:700}
+code{font-family:Consolas,Menlo,"Courier New",monospace;font-size:.88em;direction:ltr;
+  unicode-bidi:isolate;background:var(--card);border:1px solid var(--line);padding:.05rem .35rem;border-radius:4px}
+pre{direction:ltr;text-align:left;background:var(--code);color:var(--code-ink);margin:.9rem 0 1.2rem;
+  padding:2.2rem 1rem .9rem;border-radius:6px;overflow-x:auto;position:relative;
+  font-family:Consolas,Menlo,"Courier New",monospace;font-size:.84rem;line-height:1.65;tab-size:2}
+pre::before{content:attr(data-l);position:absolute;top:0;left:0;right:0;padding:.25rem 1rem;
+  font-family:"IBM Plex Sans Arabic",Tahoma,sans-serif;font-size:.78rem;font-weight:500;direction:rtl;text-align:right}
+pre.bad{border-top:4px solid var(--bad)}pre.bad::before{background:var(--bad-bg);color:var(--bad)}
+pre.good{border-top:4px solid var(--good)}pre.good::before{background:var(--good-bg);color:var(--good)}
+pre.neutral{border-top:4px solid var(--idea)}pre.neutral::before{background:var(--idea-bg);color:var(--idea)}
+pre code{background:none;border:0;padding:0;font-size:inherit}
+.note{margin:1rem 0;padding:.7rem 1rem;border-radius:4px;border-inline-start:5px solid;font-size:.98rem;line-height:1.85}
+.note>b:first-child{display:block;font-size:.9rem;margin-bottom:.15rem}
+.note p{margin:.3rem 0}
+.analogy{background:var(--idea-bg);border-color:var(--idea)}.analogy>b:first-child{color:var(--idea)}
+.why{background:var(--card);border-color:var(--ink)}
+.myth{background:var(--myth-bg);border-color:var(--myth)}.myth>b:first-child{color:var(--myth)}
+.prod{background:var(--bad-bg);border-color:var(--bad)}.prod>b:first-child{color:var(--bad)}
+.cost{background:var(--warn-bg);border-color:var(--warn)}.cost>b:first-child{color:var(--warn)}
+.fix{background:var(--good-bg);border-color:var(--good)}.fix>b:first-child{color:var(--good)}
+.senior{background:var(--card);border:1.5px dashed var(--ink);border-inline-start:5px solid var(--ink)}
+.tw{overflow-x:auto;margin:1rem 0;border:1px solid var(--line);border-radius:6px;background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:.93rem;line-height:1.7}
+th,td{padding:.55rem .8rem;text-align:start;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--paper);font-weight:700;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+ul,ol{padding-inline-start:1.4rem;margin:.6rem 0}
+li{margin:.3rem 0}
+a{color:var(--idea)}
+a:focus-visible{outline:2px solid var(--idea);outline-offset:2px}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:.6rem;margin:1rem 0}
+.legend .note{margin:0;font-size:.9rem;padding:.5rem .8rem}
+.res li{margin:.55rem 0}
+.res small{display:block;color:var(--muted);line-height:1.6}
+.res a.u{direction:ltr;unicode-bidi:isolate;word-break:break-all;font-size:.82rem;display:inline-block}
+details{margin:.8rem 0;border:1px solid var(--line);border-radius:6px;background:var(--card);padding:.2rem 1rem}
+summary{cursor:pointer;font-weight:700;padding:.5rem 0}
+summary:focus-visible{outline:2px solid var(--idea);outline-offset:2px}
+footer{margin-top:4rem;color:var(--muted);font-size:.88rem;border-top:1px solid var(--line);padding-top:1rem}
+@media (max-width:60rem){
+  .wrap{grid-template-columns:minmax(0,1fr);gap:1rem}
+  nav.toc{position:static;max-height:none}
+}
+@media print{
+  body{background:#fff;color:#000;font-size:12pt}
+  nav.toc{display:none}.wrap{display:block}
+  section{break-inside:auto}pre{white-space:pre-wrap}
+  details{border:0}details>*{display:block}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav class="toc" aria-label="فهرس المحتوى">
+  <b>الفهرس</b>
+  <a href="#intro">مقدمة وخريطة الشرايح</a>
+  <a href="#oop"><span>1</span>الـ OOP: ما بعد التعريف</a>
+  <a href="#struct"><span>2</span>Struct</a>
+  <a href="#ctor"><span>3</span>Constructors &amp; Overloading</a>
+  <a href="#encap"><span>4</span>Encapsulation</a>
+  <a href="#prop"><span>5</span>Properties</a>
+  <a href="#indexer"><span>6</span>Indexers</a>
+  <a href="#slide-errors">أخطاء ومحاذير في الشرايح</a>
+  <a href="#interview">أسئلة مقابلات</a>
+  <a href="#exercises">تمارين</a>
+  <a href="#cheat">Cheat Sheet</a>
+  <a href="#resources">المصادر</a>
+  <a href="#next">الخطوة الجاية</a>
+</nav>
+
+<main>
+
+<section id="intro" style="border:0;margin-top:0;padding-top:0">
+<h1>OOP Session 01<br>دليل الغوص العميق (C# / .NET)</h1>
+<p class="lede">مبني على شرايح السيشن (21 شريحة)، لكنه مش تكرار ليها. الشرايح بتقولك "إيه"، والملف ده بيقولك "ليه" و"إيه اللي بيحصل تحت السطح" و"إيه اللي هيوقعك في الإنتاج"، وبيصحّح كام نقطة في الشرايح نفسها.</p>
+
+<h3>خريطة الشرايح مقابل أقسام الملف</h3>
+<div class="tw"><table>
+<tr><th>الشرايح</th><th>الموضوع</th><th>القسم</th></tr>
+<tr><td>3 – 4</td><td>What is OOP / Core Idea</td><td><a href="#oop">1</a></td></tr>
+<tr><td>5، 6، 8، 10</td><td>Struct: الاستخدام، الـ constructors حسب إصدار C#، النسخ بالقيمة</td><td><a href="#struct">2</a></td></tr>
+<tr><td>7، 9</td><td>Constructors وConstructor Overloading</td><td><a href="#ctor">3</a></td></tr>
+<tr><td>11 – 13</td><td>Encapsulation ومثال الـ Bank</td><td><a href="#encap">4</a></td></tr>
+<tr><td>14 – 18</td><td>Properties وأنواعها والمقارنة بالـ Field</td><td><a href="#prop">5</a></td></tr>
+<tr><td>19 – 20</td><td>Indexers</td><td><a href="#indexer">6</a></td></tr>
+</table></div>
+
+<h3>دليل الألوان</h3>
+<div class="legend">
+  <div class="note analogy"><b>تشبيه</b>الفكرة في مثال من الواقع.</div>
+  <div class="note why"><b>الميكانيزم</b>إيه اللي بيحصل تحت السطح.</div>
+  <div class="note myth"><b>مفهوم غلط</b>اللي الناس (وأحيانًا الشرايح) بتبسّطه.</div>
+  <div class="note prod"><b>في الإنتاج</b>الباج أو المشكلة الفعلية.</div>
+  <div class="note cost"><b>Trade-off</b>تكلفة الحل وحدوده.</div>
+  <div class="note fix"><b>الحل</b>الاتجاه الصح.</div>
+  <div class="note senior"><b>ملاحظة سينيور</b>حاجة زيادة تفرّق.</div>
+</div>
+
+<div class="note cost"><b>ملاحظة عن الأكواد</b>
+<p>الأكواد مكتوبة بعناية وبتطبع ويتوقع منها السلوك الموصوف، لكن <b>ماتجرّبتش على compiler في بيئة الكتابة</b>. جرّب الأمثلة المهمة بنفسك على <span class="en">sharplab.io</span> أو مشروع Console، وخصوصًا اللي فيها رسايل الـ compiler (زي <code>CS1612</code>). التجربة بإيدك هي أسرع طريقة تثبّت المعلومة. وإصدارات اللغة المذكورة: C# 9 = .NET 5، C# 10 = .NET 6، C# 11 = .NET 7، C# 12 = .NET 8، C# 13 = .NET 9، C# 14 = .NET 10.</p></div>
+</section>
+
+<!-- ===================== 1. OOP ===================== -->
+<section id="oop">
+<div class="risk-h"><span class="tag">شرايح 3 – 4</span><h2>1) الـ OOP: ما بعد التعريف</h2></div>
+
+<div class="note analogy"><b>تشبيه</b>ماكينة الـ ATM. بتديك أزرار (methods) تعمل بيها حاجات محددة، وعمرك ما بتفتح الماكينة وتمد إيدك على الفلوس (state). الماكينة هي الوحيدة المسموح لها تغيّر رصيدها، وبقواعدها هي. ده جوهر الـ OOP: <b>ربط الـ state بالكود الوحيد المسموح له يغيّره</b>.</div>
+
+<h3>ليه الـ OOP اتخلق أصلًا؟</h3>
+<div class="note why"><b>المشكلة الحقيقية</b>
+<p>في البرمجة الإجرائية (procedural) الداتا بتبقى متاحة لأي function. لما البرنامج يكبر، أي function ممكن تبوّظ داتا function تانية، ومحدش يعرف مين غيّر إيه ومتى. الـ OOP مش "طريقة نحاكي بيها العالم الحقيقي"، هو <b>أداة للتحكم في مين يقدر يغيّر الـ state</b>. الـ class هو الحدود اللي بترسمها حوالين الـ state والكود المسؤول عنه.</p></div>
+
+<div class="tw"><table>
+<tr><th>مفهوم غلط (الشريحة بتلمّح له)</th><th>الحقيقة</th></tr>
+<tr><td>"الـ OOP بيحاكي العالم الحقيقي"</td><td>ده استعارة تعليمية مفيدة للمبتدئ، لكنها بتضلّل في التصميم. الـ objects في الأنظمة الحقيقية بتمثّل <b>مسؤوليات</b> مش أشياء: <code>PaymentProcessor</code> و<code>OrderValidator</code> مالهمش وجود في العالم الحقيقي. وفي الشريحة 4، <code>Student.Study()</code> و<code>Student.TakeExam()</code> أفعال واقعية، لكن نظام تسجيل طلبة حقيقي عمره ما هيكتب <code>Study()</code>. اللي بيهمه: <code>Enroll</code> و<code>RecordGrade</code>.</td></tr>
+<tr><td>"OOP = classes"</td><td>الـ class مجرد آلية. لو كل الـ fields عامة وكل الـ methods بتاخد الـ object وتعدّل فيه من بره، تبقى كتبت كود إجرائي جوه classes.</td></tr>
+<tr><td>"الـ OOP يعني reusability"</td><td>إعادة الاستخدام عن طريق الـ inheritance غالبًا بتعمل coupling سيئ. الأفضل في الغالب composition (هنوصلها في السيشنز الجاية).</td></tr>
+<tr><td>"كل حاجة في C# هي object"</td><td>صح على مستوى الـ type system (حتى <code>int</code> بيرث من <code>System.Object</code>)، لكن مش معناها إن كل حاجة instance على الـ heap. <code>int</code> نفسه <span class="en">struct</span> (<code>System.Int32</code>) وبيتخزن inline. هنشوف ده في القسم 2.</td></tr>
+</table></div>
+
+<h3>الـ object في الميموري: ليه ده يهمك؟</h3>
+<p>الـ instance لأي <b>class</b> على x64 ليه overhead ثابت قبل ما تحط field واحد:</p>
+<div class="tw"><table>
+<tr><th>الجزء</th><th>الحجم</th><th>وظيفته</th></tr>
+<tr><td>Object header</td><td>8 bytes</td><td>بيتستخدم للـ <code>lock</code> وللـ hash code وبعض حالات الـ GC</td></tr>
+<tr><td>Method Table pointer</td><td>8 bytes</td><td>بيحدد نوع الـ object وبيدعم الـ virtual calls والـ type checks</td></tr>
+<tr><td>الـ fields</td><td>حسب النوع</td><td>الـ state بتاعك</td></tr>
+</table></div>
+<p>يعني <code>class Point { int X, Y; }</code> حجمه حوالي <b>24 bytes</b> (16 overhead + 8 داتا) لأن أقل حجم لـ object هو 24 bytes، غير الـ reference نفسه (8 bytes) اللي بيشاور عليه. الرقم ده هو السبب الحقيقي اللي عملنا عشانه الـ <code>struct</code> (القسم 2).</p>
+
+<h3>الـ Aliasing: أول باج بيقابلك بين الـ class والـ struct</h3>
+<pre class="bad" data-l="سلوك مفاجئ للمبتدئ: الـ class هو reference"><code>var a = new Student { Name = "Ali" };
+var b = a;                       // بينسخ الـ reference مش الـ object
+b.Name = "Sara";
+Console.WriteLine(a.Name);       // "Sara" ← a وb بيشاوروا على object واحد</code></pre>
+<div class="note prod"><b>في الإنتاج</b>ده أصل باجات زي: تعدّل object جوه method فتتغيّر حاجة في مكان بعيد خالص، أو cache بيرجّع نفس الـ object لطلبين فيحصل تداخل بين مستخدمين. مقارنته بالـ struct (نسخة مستقلة) هي اللي هتخلّيك تفهم القسم الجاي.</div>
+
+<h3>"Objects Communicate" (الشريحة 4)</h3>
+<div class="note why"><b>الميكانيزم</b>
+<p>الـ method call على instance عادي في .NET هو فعليًا call لـ function عادية، والـ object بيتبعت لها كـ argument مخفي اسمه <code>this</code>. لما تتعامل مع <code>virtual</code> methods بيدخل الـ Method Table pointer في اللعبة عشان يحدد أنهي implementation يتنادى. (ده موضوع Polymorphism في سيشن جاي.) فكرة "الرسائل" جاية من Alan Kay: الـ object بيستقبل رسالة ويقرر بنفسه يعمل إيه.</p></div>
+
+<div class="note senior"><b>ملاحظة سينيور</b>
+<p>اسأل نفسك عن أي class: <b>"مين المسموح له يغيّر الحالة دي؟"</b> لو الإجابة "أي حد"، مفيش encapsulation حتى لو كل الـ fields عندك <code>private</code> وكل حاجة عاملها property بـ <code>get; set;</code>. وكمان مبدأ <b>Tell, Don't Ask</b>: بدل ما تسأل الـ object عن حالته وتقرر أنت من بره، قوله يعمل الشغل (<code>order.Ship()</code> بدل <code>if (order.Status == Paid) order.Status = Shipped</code>).</p></div>
+</section>
+
+<!-- ===================== 2. STRUCT ===================== -->
+<section id="struct">
+<div class="risk-h"><span class="tag">شرايح 5، 6، 8، 10</span><h2>2) Struct</h2></div>
+
+<div class="note analogy"><b>تشبيه</b>الـ struct زي <b>ورقة فيها رقم تليفون بتصوّرها وتدّيها لصاحبك</b>: هو بيكتب عليها ويشخبط براحته، وورقتك ما بتتأثرش. الـ class زي <b>لينك Google Doc</b>: كل اللي معاهم اللينك بيعدّلوا في نفس المستند.</div>
+
+<h3>2.1) الشريحة بتقول إيه، وإيه اللي محتاج تصحيح؟</h3>
+<div class="tw"><table>
+<tr><th>اللي في الشريحة 5</th><th>التصحيح الدقيق</th></tr>
+<tr><td>"Stored on the stack"</td><td>تبسيط مضلّل. الـ value type بيتخزن <b>في المكان اللي معرَّف فيه</b>، مش دايمًا stack (الجدول تحت).</td></tr>
+<tr><td>"Cannot inherit from other structs or classes"</td><td>ناقصها: الـ struct <b>بيرث ضمنيًا</b> من <code>System.ValueType</code> (اللي بيرث من <code>object</code>)، و<b>بيقدر يطبّق interfaces</b>، وكمان <b>محدش يقدر يرث منه</b> (sealed ضمنيًا).</td></tr>
+<tr><td>"Best for small, simple data"</td><td>صح، بس فيه معيار رقمي في الـ Design Guidelines (في 2.9).</td></tr>
+<tr><td>"Copied by value — each copy is independent"</td><td>صح للـ fields العادية. لو الـ struct فيه <b>reference field</b> (array مثلًا) النسخة shallow (في 2.5).</td></tr>
+</table></div>
+
+<h3>2.2) مفهوم غلط: "الـ struct على الـ stack"</h3>
+<div class="note myth"><b>مفهوم غلط</b>
+<p>الأدق: <b>الـ value type بيتخزن inline في اللي شايله</b>. الـ stack مجرد تفصيلة تنفيذ (implementation detail)، وده كلام Eric Lippert (اقرا مقاله في المصادر).</p></div>
+<div class="tw"><table>
+<tr><th>الحالة</th><th>بتتخزن فين</th></tr>
+<tr><td>local variable من نوع struct (عادي)</td><td>stack (أو CPU register بعد تحسين الـ JIT)</td></tr>
+<tr><td>field جوه class</td><td><b>جوه الـ heap object نفسه</b>، مفيش stack هنا</td></tr>
+<tr><td>عنصر في array (<code>Point[]</code>)</td><td>متسلسل جوه الـ array على الـ heap</td></tr>
+<tr><td>متلقطة (captured) في lambda أو closure</td><td>field جوه closure class على الـ heap</td></tr>
+<tr><td>بعد boxing (<code>object o = p</code>)</td><td>نسخة على الـ heap</td></tr>
+<tr><td>local في <code>async</code> method عابر لـ <code>await</code></td><td>field جوه الـ state machine (struct في Release، وبيتعمله box على الـ heap لو الـ await فعلًا اتعلّق)</td></tr>
+<tr><td>local في iterator (<code>yield return</code>)</td><td>field جوه class على الـ heap</td></tr>
+</table></div>
+<p>النوع الوحيد اللي <b>مضمون</b> إنه stack-only هو <code>ref struct</code> (زي <code>Span&lt;T&gt;</code>)، وده قيد بيفرضه الـ compiler عليك عن قصد.</p>
+
+<h3>2.3) ليه الـ struct موجود أصلًا؟ (الأرقام)</h3>
+<div class="tw"><table>
+<tr><th></th><th><code>struct Point {int X,Y}</code></th><th><code>class Point {int X,Y}</code></th></tr>
+<tr><td>حجم العنصر</td><td>8 bytes</td><td>24 bytes (object) + 8 bytes (reference)</td></tr>
+<tr><td><code>Point[1_000_000]</code></td><td>حوالي 8 MB متسلسلة</td><td>حوالي 8 MB references + 24 MB objects مبعثرة</td></tr>
+<tr><td>objects بيتابعها الـ GC</td><td>1 (الـ array نفسه)</td><td>1,000,001</td></tr>
+<tr><td>القراءة بالترتيب</td><td>cache-friendly (بيانات متجاورة)</td><td>pointer chasing (كل عنصر في مكان)</td></tr>
+</table></div>
+<div class="note why"><b>الميكانيزم</b>الـ struct array اللي مفيهوش references الـ GC مش محتاج يزور عناصره واحد واحد. وكمان المعالج بيجيب بيانات متجاورة من الـ cache في دفعة واحدة، فالمرور على مليون <code>struct</code> أسرع بكتير من مليون <code>class</code> مبعثرين. ده السبب الحقيقي لـ "fast access" اللي الشريحة ذكرتها، مش الـ stack.</div>
+
+<h3>2.4) <code>new</code> على struct مبتحجزش heap</h3>
+<pre class="neutral" data-l="الشريحة 6: new Point() مش معناها allocation"><code>Point p = new Point();   // مفيش heap ومفيش constructor call: المترجم بيطلع initobj (تصفير الـ bytes)
+
+Point q;                 // ✅ مقبولة: مش لازم new لو هتعيّن كل الـ fields بنفسك
+q.X = 1; q.Y = 2;
+q.Print();</code></pre>
+<div class="note myth"><b>مفهوم غلط</b>"<code>new</code> يعني heap". ده صح للـ classes بس. للـ struct، <code>new</code> معناها "استدعي الـ constructor على المكان اللي المتغير فيه". وكمان ده هو سبب إن الـ compiler يقبل <code>Point q;</code> من غير <code>new</code> طالما عيّنت كل الـ fields (Definite Assignment).</div>
+
+<h3>2.5) Copy by Value: التفاصيل اللي الشريحة 10 مبتقولهاش</h3>
+<p>النسخ بيحصل في: الـ assignment، وتمرير الـ argument، والـ <code>return</code>، والـ <code>foreach</code> variable، وعند الـ boxing/unboxing، وعند قراءة property أو indexer بيرجّع struct. كل مرة الـ compiler بيعمل نسخة كاملة من الـ bytes.</p>
+
+<div class="note myth"><b>مفهوم غلط: "النسخة مستقلة تمامًا"</b>
+<p>النسخة shallow: بتنسخ الـ bytes، ولو فيها reference field بتنسخ الـ <b>reference</b> مش الـ object اللي بيشاور عليه.</p></div>
+<pre class="bad" data-l="مستقلة؟ لأ. الـ array مشترك بين النسختين"><code>struct Holder { public int[] Data; public int Count; }
+
+var a = new Holder { Data = new[] { 1, 2, 3 }, Count = 3 };
+var b = a;               // نسخة
+b.Count = 99;            // a.Count لسه 3 ✅ (مستقلة)
+b.Data[0] = 100;         // a.Data[0] بقت 100 ❌ (نفس الـ array)</code></pre>
+
+<div class="note cost"><b>Trade-off: struct كبير = نسخ كتير</b>
+<p>لو الـ struct حجمه 64 bytes، كل تمرير بالقيمة بينسخ 64 bytes. الحل المعتاد <code>in</code> parameter (تمرير by readonly reference)، لكن لو الـ struct مش <code>readonly</code> الـ compiler ممكن يعمل <b>defensive copy</b> جوه الـ method فتضيع الفايدة. الحل: <code>readonly struct</code> (في 2.9).</p></div>
+
+<h3>2.6) ليه الـ struct مبيقدرش يرث؟ (مش قيد تعسفي)</h3>
+<div class="note why"><b>السبب التصميمي</b>
+<p>الـ instance من struct مفيهوش object header ولا Method Table pointer، وحجمه ثابت ومحدد وقت الـ compile، ومتخزن inline. الـ inheritance محتاج (1) virtual dispatch عن طريق الـ Method Table، و(2) إن متغير من نوع الأب يقدر يشيل ابن أكبر حجمًا. الاتنين مستحيلين مع تخزين inline بحجم ثابت. لو سمحوا بيها كنت هتقع في <b>object slicing</b> زي C++: تعمل <code>Base b = derived</code> فيتقطع الجزء الزيادة. عشان كده اللي بيتاح ليك: <b>interfaces</b> (وبيحصل boxing لو استخدمتها كـ interface).</p></div>
+
+<h3>2.7) فخاخ الـ Mutable Struct: أخطر جزء في القسم</h3>
+<p>لأن كل قراءة بتنسخ، أي كود بيعدّل على النسخة بيبان شغال وهو مش بيعمل حاجة. الـ compiler بيحميك في بعض الحالات ويسكت في غيرها.</p>
+
+<pre class="bad" data-l="1) List&lt;struct&gt;: الـ indexer بيرجّع نسخة"><code>struct Point { public int X, Y; public Point(int x, int y) { X = x; Y = y; } }
+
+var list = new List&lt;Point&gt; { new Point(1, 2) };
+// list[0].X = 10;            // ❌ CS1612: القيمة الراجعة نسخة مؤقتة مش variable
+var p = list[0]; p.X = 10;    // بتعدّل نسخة، والـ list لسه (1, 2)
+list[0] = p;                  // ✅ لازم تكتب النسخة تاني
+
+var arr = new[] { new Point(1, 2) };
+arr[0].X = 10;                // ✅ شغال: عنصر الـ array هو variable مش قيمة راجعة</code></pre>
+
+<pre class="bad" data-l="2) foreach + 3) property + 4) readonly field"><code>foreach (var q in list) { /* q.X = 0; */ }   // ❌ CS1654: q متغير قراءة فقط
+
+class Shape { public Point Origin { get; set; } }
+var s = new Shape();
+// s.Origin.X = 5;            // ❌ CS1612: الـ getter بيرجّع نسخة
+
+struct Counter { public int N; public void Inc() =&gt; N++; }
+class Holder { public readonly Counter C = new Counter(); }
+var h = new Holder();
+h.C.Inc();                    // بتتنفذ بدون error!
+Console.WriteLine(h.C.N);     // 0 ← الـ Inc اشتغلت على نسخة دفاعية (defensive copy)</code></pre>
+<div class="note prod"><b>في الإنتاج</b>الحالة الرابعة أخطرهم: مفيش error ولا warning، والكود بيبان صح، والنتيجة غلط. بتتكرر بالذات مع struct فيها methods بتغيّر الحالة (زي counters وaccumulators وstate machines) متخزنة في <code>readonly</code> field.</div>
+<div class="note fix"><b>الحل</b>خلّي الـ struct <b>immutable</b>: <code>readonly struct</code> وكل الـ members للقراءة فقط، وعدّل بإنك تعمل instance جديد (<code>p = p with { X = 10 }</code> مع record struct، أو ctor جديد). وكده الـ compiler نفسه بيمنع الفخاخ دي.</div>
+
+<h3>2.8) Boxing وEquality</h3>
+<ul>
+<li><b>Boxing:</b> <code>object o = p;</code> أو تحويل struct لـ interface بينسخه على الـ heap (allocation + GC). لو حصل جوه loop ساخن تحس بالفرق.</li>
+<li><b>الـ default equality:</b> <code>ValueType.Equals</code> لو الـ struct فيه reference fields أو padding بيقارن بالـ reflection (بطيء وبيعمل allocations)، والـ <code>GetHashCode</code> الافتراضي مش مصمم يكون hash قوي (ممكن يعتمد على field واحد بس).</li>
+<li><b>مفتاح في Dictionary:</b> struct ما بيطبّقش <code>IEquatable&lt;T&gt;</code> بيخلي المقارنة تعدّي على <code>Equals(object)</code> فيحصل boxing في كل مقارنة.</li>
+</ul>
+<pre class="good" data-l="الحل الأسهل: record struct بيولّد كل ده"><code>public readonly record struct Money(decimal Amount, string Currency);
+// Equals / GetHashCode / IEquatable&lt;Money&gt; / ToString / Deconstruct / with كلهم متولدين</code></pre>
+<div class="note cost"><b>فخ</b><code>record struct</code> من غير <code>readonly</code> خصائصه المتولدة <b>get/set</b> (mutable)، يعني رجعت للفخاخ. استخدم <code>readonly record struct</code> غالبًا.</div>
+
+<h3>2.9) Class مقابل Struct: قرار مش ذوق</h3>
+<div class="tw"><table>
+<tr><th>المعيار</th><th>class</th><th>struct</th></tr>
+<tr><td>الفئة</td><td>reference type</td><td>value type</td></tr>
+<tr><td>الـ assignment</td><td>بينسخ الـ reference (aliasing)</td><td>بينسخ كل الداتا</td></tr>
+<tr><td>الـ default value</td><td><code>null</code></td><td>كل الـ bits صفر (مفيش null، محتاج <code>T?</code>)</td></tr>
+<tr><td>الـ inheritance</td><td>أيوه</td><td>لأ (interfaces بس)</td></tr>
+<tr><td>الـ finalizer</td><td>ممكن</td><td>مش ممكن</td></tr>
+<tr><td>الـ equality الافتراضي</td><td>reference equality</td><td>value equality (بطيء لو مش overridden)</td></tr>
+<tr><td>تكلفة الـ GC</td><td>كل instance بيتتابع</td><td>مفيش تتبع منفصل (بيتحسب مع اللي شايله)</td></tr>
+<tr><td>الخطر الرئيسي</td><td>aliasing غير مقصود</td><td>نسخ غير مقصودة، وboxing</td></tr>
+</table></div>
+<div class="note why"><b>قاعدة Framework Design Guidelines</b>
+<p>استخدم struct <b>فقط</b> لو النوع: (1) بيمثّل قيمة واحدة منطقيًا زي الـ primitives، (2) حجمه أقل من حوالي 16 bytes، (3) <b>immutable</b>، (4) مش هيتعمله boxing كتير. لو واحدة منهم مش متحققة، استخدم class. وأمثلة الشريحة (إحداثيات، ألوان، فلوس) منطقية بشرط الـ immutability. وفي .NET نفسه: <code>int</code>، <code>double</code>، <code>decimal</code>، <code>DateTime</code>، <code>Guid</code>، <code>TimeSpan</code>، <code>Nullable&lt;T&gt;</code> كلها structs.</p></div>
+
+<div class="note senior"><b>ملاحظة سينيور</b>
+<p>مفيش تحسين أداء بيتقرر بالحدس: قبل ما تحوّل class لـ struct <b>قيس</b> بـ BenchmarkDotNet. struct كبير أو mutable أو بيتعمله boxing كتير ممكن يطلع أبطأ من class. ومعيار أعمق: هل النوع ده ليه <b>هوية</b> (Identity: زي Customer) ولا هو مجرد <b>قيمة</b> (Value: زي Money)؟ الهوية للـ class، والقيمة للـ struct/record. وده أساس مفهوم الـ Value Object في الـ DDD.</p></div>
+</section>
+
+<!-- ===================== 3. CONSTRUCTORS ===================== -->
+<section id="ctor">
+<div class="risk-h"><span class="tag">شرايح 7، 8، 9</span><h2>3) Constructors &amp; Overloading</h2></div>
+
+<div class="note analogy"><b>تشبيه</b>الـ constructor هو <b>فحص الجودة في آخر خط الإنتاج</b>: مفيش منتج يوصل للعميل إلا لو عدّى الفحص. لو الفحص ضعيف، كل المنتجات اللي بتخرج ممكن تبقى معيبة، ومحدش هيكتشف غير لما العميل يستخدمها.</div>
+
+<h3>3.1) إيه اللي بيحصل فعلًا عند <code>new Student("Ali", 20)</code>؟</h3>
+<div class="note why"><b>الميكانيزم (للـ class)</b>
+<ol>
+<li>الـ runtime بيحجز ميموري على الـ heap للـ object (header + Method Table pointer + fields) وبيصفّرها كلها.</li>
+<li>بيشغّل الـ <b>field initializers</b> (لو موجودة).</li>
+<li>بينادي الـ constructor (اسمه في الـ IL هو <code>.ctor</code>).</li>
+<li>بيرجّع الـ reference.</li>
+</ol>
+<p>الـ object مستحيل يوصل لكودك قبل ما الـ constructor يخلّص، إلا لو أنت سرّبت <code>this</code> جواه (مثلًا اشتركت بيه في event أو حطيته في static list).</p></div>
+
+<h3>3.2) القواعد الأربعة في الشريحة 7: ليه؟ وإيه اللي ناقص؟</h3>
+<div class="tw"><table>
+<tr><th>القاعدة</th><th>السبب الحقيقي</th><th>اللي ناقص</th></tr>
+<tr><td>1) الاسم = اسم الـ class</td><td>ده اللي بيميّزه عن باقي الـ methods لغويًا</td><td>الـ IL بيسمّيه <code>.ctor</code> دايمًا، والاسم في الـ C# مجرد syntax</td></tr>
+<tr><td>2) مفيش return type (ولا void)</td><td>ناتج <code>new</code> هو الـ object نفسه، فمفيش قيمة تانية ترجع. لو كتبت <code>public void Car()</code> جوه <code>class Car</code> فده مش constructor، ده خطأ <code>CS0542</code> (member ما ينفعش يكون اسمه زي الـ class)</td><td>الـ compiler بيرفض الاسم أصلًا، مش بيعتبرها method عادية</td></tr>
+<tr><td>3) بيتنادى تلقائيًا بـ <code>new</code></td><td>الـ <code>new</code> هي اللي بتحجز وتصفّر وتشغّل</td><td>مش دايمًا: <code>Activator.CreateInstance</code> والـ reflection بينادوه، لكن <code>MemberwiseClone</code> وبعض الـ serializers بيبنوا الـ object <b>من غير</b> ما ينادوه</td></tr>
+<tr><td>4) الـ default ctor لو ما كتبتش</td><td>عشان أي class يقدر يتعمل منه instance</td><td><b>بيختفي</b> أول ما تكتب أي constructor (الفخ تحت)</td></tr>
+</table></div>
+
+<h3>الفخ: الـ default constructor بيختفي</h3>
+<pre class="bad" data-l="أول ما كتبت constructor، الـ default اختفى"><code>public class Student
+{
+    public string Name;
+    public Student(string name) { Name = name; }
+}
+
+var s = new Student();   // ❌ CS7036: مفيش argument للـ parameter المطلوب</code></pre>
+<div class="note prod"><b>في الإنتاج</b>الـ compile error هنا هو الجانب الكويس. المشكلة الحقيقية مع الأكواد اللي بتنشئ objects <b>بدون ما تظهر <code>new</code></b>: قيد <code>where T : new()</code> في الـ generics، و<code>Activator.CreateInstance&lt;T&gt;()</code>، وبعض الـ serializers والـ ORMs والـ model binders. دي بتفشل وقت التشغيل مش وقت الـ compile، وأحيانًا في مسار نادر بس.</div>
+<ul>
+<li>الـ default constructor اللي المترجم بيولّده <b>public</b> للـ class العادي، و<b>protected</b> للـ abstract class، ومفيش واحد للـ static class.</li>
+<li><b>Static constructor</b> (<code>static Student() { }</code>): بيتنفذ مرة واحدة قبل أول استخدام للـ type. لو رمى exception، النوع كله بيتعلّم "فاشل" ويرمي <code>TypeInitializationException</code> في كل استخدام بعد كده طول عمر الـ process. باج بيقلب كل الـ requests بعد أول فشل.</li>
+</ul>
+
+<h3>3.3) ترتيب التهيئة (Initialization Order)</h3>
+<pre class="neutral" data-l="جرّبه: الترتيب مش زي ما بتتخيل"><code>static class T { public static int L(string s) { Console.WriteLine(s); return 0; } }
+
+class A
+{
+    int _x = T.L("A.field");
+    public A() { T.L("A.ctor"); }
+}
+class B : A
+{
+    int _y = T.L("B.field");
+    public B() { T.L("B.ctor"); }
+}
+
+new B();
+// B.field  → A.field → A.ctor → B.ctor</code></pre>
+<div class="note why"><b>الترتيب</b>field initializers للـ class الابن، بعدين field initializers للأب، بعدين ctor الأب، وأخيرًا ctor الابن. (ده مختلف عن C++ و Java.)</div>
+
+<pre class="bad" data-l="الفخ الكلاسيكي: virtual call جوه الـ constructor"><code>class Base
+{
+    public Base() { Init(); }              // بينادي override قبل ما الابن يخلّص
+    protected virtual void Init() { }
+}
+class Derived : Base
+{
+    string _name;
+    public Derived() { _name = "ready"; }  // لسه ما اتنفذش لما Init اشتغلت
+    protected override void Init() =&gt; Console.WriteLine(_name ?? "null");
+}
+new Derived();   // بيطبع "null"</code></pre>
+<div class="note fix"><b>الحل</b>متنادي <code>virtual</code> methods من constructor. ولو محتاج تهيئة قابلة للتخصيص، استخدم factory method أو مرحلة <code>Initialize()</code> صريحة بعد الإنشاء. (ده تمهيد لسيشن الـ Inheritance.)</div>
+
+<h3>3.4) Constructors في الـ Struct (الشريحة 8)</h3>
+<div class="tw"><table>
+<tr><th></th><th>C# 9 وقبل</th><th>C# 10 (.NET 6)</th><th>C# 11 (.NET 7)</th></tr>
+<tr><td>Explicit parameterless ctor</td><td>ممنوع</td><td>مسموح</td><td>مسموح</td></tr>
+<tr><td>Field initializers (<code>int X = 5;</code>)</td><td>ممنوع</td><td>مسموح بشرط وجود ctor صريح واحد على الأقل (<code>CS8983</code>)</td><td>نفس C# 10</td></tr>
+<tr><td>الـ ctor بـ parameters لازم يعيّن <b>كل</b> الـ fields</td><td>أيوه (<code>CS0171</code>)</td><td>أيوه</td><td>لأ: المترجم بيصفّر الباقي (auto-default)</td></tr>
+</table></div>
+
+<div class="note why"><b>ليه كان ممنوع parameterless ctor أصلًا؟ (قرار تصميمي مش تعسفي)</b>
+<p>لأن فيه أماكن كتير الـ CLR بيصنع فيها struct <b>من غير ما ينادي أي constructor</b> (الـ arrays، والـ fields الافتراضية، و<code>default</code>). لو سمحوا بـ ctor يعمل تهيئة خاصة، هتفتكر إن كل instance عدّى منه، وده مش صحيح. المصممين فضّلوا يمنعوه على إنه يديك ضمان زائف.</p></div>
+
+<pre class="bad" data-l="حتى بعد C# 10 الضمان الزائف لسه موجود"><code>struct Temp
+{
+    public double C;
+    public Temp() { C = 20; }        // C# 10+
+}
+
+var a = new Temp();                  // C = 20 (بينادي الـ ctor)
+var b = default(Temp);               // C = 0  (مبينادهوش)
+var arr = new Temp[3];               // كلهم C = 0
+class Sensor { public Temp Last; }   // الـ field هنا كمان C = 0 لحد ما تعيّنه</code></pre>
+
+<pre class="neutral" data-l="الحيلة القديمة (C# 10 وقبل) بدل تعيين كل الـ fields"><code>struct P
+{
+    public int X, Y, Z;
+    public P(int x) : this() { X = x; }   // : this() بيصفّر الكل، فالـ compiler يعتبرهم معيّنين
+}
+// من C# 11: public P(int x) { X = x; }  بتشتغل من غير : this()</code></pre>
+
+<div class="note myth"><b>تصحيحات على الشريحة 8</b>
+<ul>
+<li>الشريحة بتقول "attribute initialization". المصطلح الصح في C# هو <b>fields</b>. الـ attribute عندنا معناه شيء تاني (metadata زي <code>[Obsolete]</code>).</li>
+<li>لوحة C# 10 مبتذكرش أهم ميزة في C# 10 نفسها: إمكانية parameterless ctor وfield initializers.</li>
+<li>الـ <code>Point p3 = new Point(5);</code> بتفشل في الشريحة لأن <b>مفيش ctor بـ parameter واحد</b>، مش لأن الـ fields مش متهيّأة.</li>
+</ul></div>
+
+<h3>3.5) Constructor Overloading (الشريحة 9)</h3>
+<div class="note why"><b>الميكانيزم: Overload Resolution بيحصل وقت الـ compile</b>
+<p>الـ compiler بيختار الـ overload حسب <b>الـ type المعلن للـ argument</b>، مش الـ type الفعلي وقت التشغيل. لو أكتر من واحد مناسب، بيختار "أحسن conversion". ولو مفيش أحسن واضح يطلع <code>CS0121</code> (ambiguous).</p></div>
+<pre class="neutral" data-l="أحسن conversion + الـ static type"><code>void Print(int x)    =&gt; Console.WriteLine("int");
+void Print(long x)   =&gt; Console.WriteLine("long");
+void Print(object x) =&gt; Console.WriteLine("object");
+
+Print(5);              // int    (تطابق تام)
+Print((short)5);       // int    (short → int أفضل من short → long)
+object o = "hello";
+Print(o);              // object (النوع المعلن، مش الفعلي)</code></pre>
+
+<h3>عيب في كود الشريحة 9 نفسه</h3>
+<div class="note myth"><b>تصحيح</b>
+<ul>
+<li>الـ fields في المثال <code>public</code> (<code>Name</code> و<code>Age</code> و<code>Gpa</code>)، وده بيناقض درس الـ Encapsulation في نفس السيشن.</li>
+<li>الـ constructors التلاتة بتكرر نفس التعيينات. لما تضيف validation هتكرره تلات مرات، وهتنساه في واحد.</li>
+</ul></div>
+<pre class="good" data-l="Constructor Chaining: مكان واحد للمنطق"><code>public class Student
+{
+    public string Name { get; }
+    public int    Age  { get; }
+    public double Gpa  { get; }
+
+    public Student() : this("Unknown", 0) { }
+    public Student(string name, int age) : this(name, age, 0.0) { }
+
+    public Student(string name, int age, double gpa)   // الـ "master ctor"
+    {
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Name is required", nameof(name));
+        if (age &lt; 0) throw new ArgumentOutOfRangeException(nameof(age));
+        if (gpa is &lt; 0 or &gt; 4) throw new ArgumentOutOfRangeException(nameof(gpa));
+        Name = name; Age = age; Gpa = gpa;
+    }
+}</code></pre>
+<p>الـ <code>: this(...)</code> بيتنفذ <b>قبل</b> جسم الـ constructor الحالي. والـ master ctor هو الوحيد اللي فيه validation وتعيين، فالـ object مستحيل يتعمل في حالة غير صالحة.</p>
+
+<h3>بدائل الـ Overloading: مقارنة</h3>
+<div class="tw"><table>
+<tr><th>الأسلوب</th><th>متى تستخدمه</th><th>التكلفة</th></tr>
+<tr><td>Overloads</td><td>صيغتين أو تلاتة واضحين لإنشاء object صالح</td><td>كل ما يزيدوا يتلخبط اللي بيستخدمها، وممكن يحصل التباس لو الأنواع متشابهة</td></tr>
+<tr><td>Optional parameters</td><td>defaults بسيطة</td><td>القيمة الافتراضية بتتكتب جوه كود المستدعي وقت الـ compile (الفخ تحت)</td></tr>
+<tr><td>Object initializer</td><td>خصائص كتير اختيارية</td><td>ممكن يتعمل object في حالة ناقصة</td></tr>
+<tr><td><code>required</code> + <code>init</code> (C# 11)</td><td>حقول إجبارية على object immutable</td><td>بيضمن إنها اتحدّدت، مش إنها صالحة (validation منفصل)</td></tr>
+<tr><td>Static factory (<code>Student.CreateGuest()</code>)</td><td>لما الأسماء بتوضّح المعنى، أو صيغتين بنفس الأنواع بمعنيين مختلفين</td><td>كود أكتر، وأقل شهرة عند المبتدئين</td></tr>
+</table></div>
+
+<div class="note prod"><b>في الإنتاج: فخ الـ Optional Parameters</b>
+<pre class="bad" data-l="القيمة الافتراضية بتتحرق في الـ IL بتاع المستدعي"><code>// Library v1
+public Student(string name, int age = 18) { ... }
+// التطبيق اتعمله compile ضد v1: كل استدعاء new Student("Ali") اتحوّل لـ new Student("Ali", 18)
+
+// Library v2 غيّرت الـ default لـ 20
+// التطبيق (من غير recompile) لسه بيبعت 18</code></pre>
+<p>ده تغيير صامت في السلوك بين assemblies. لو الـ default ممكن يتغيّر مع الوقت، استخدم overload بدل optional parameter.</p></div>
+
+<div class="note senior"><b>ملاحظة سينيور</b>
+<ul>
+<li><b>Primary constructors (C# 12):</b> <code>class Student(string name, int age)</code>. انتبه: في الـ class والـ struct العاديين الـ parameters <b>مش بتتحول لـ properties تلقائيًا</b> (عكس الـ <code>record</code>). هي بس متاحة جوه الـ class، والـ compiler بيخزنها في hidden fields لو استخدمتها في methods (يعني ممكن تتغيّر!). حوّلها بنفسك: <code>public string Name { get; } = name;</code>.</li>
+<li>الـ constructor ما بيعملش I/O ولا <code>await</code> (مفيش async constructors). لو محتاج تهيئة async استخدم <code>static async Task&lt;T&gt; CreateAsync()</code> مع constructor private.</li>
+<li>لو الـ constructor بيستقبل 6-7 dependencies (DI)، ده مؤشر إن الـ class بيعمل أكتر من مسؤولية.</li>
+</ul></div>
+</section>
+
+<!-- ===================== 4. ENCAPSULATION ===================== -->
+<section id="encap">
+<div class="risk-h"><span class="tag">شرايح 11 – 13</span><h2>4) Encapsulation</h2></div>
+
+<div class="note analogy"><b>تشبيه</b>عداد الكهربا. بتقرا رقمه (get)، لكن مش بتقدر تفتحه وتعدّل الرقم بإيدك. شركة الكهربا بس هي اللي تقدر تغيّره، وبإجراءات محددة. لو كان أي حد يقدر يكتب الرقم، الفواتير كلها تفقد معناها.</div>
+
+<h3>4.1) مفاهيم غلط شائعة (وأول واحد في تعريف الشريحة)</h3>
+<div class="tw"><table>
+<tr><th>مفهوم غلط</th><th>الحقيقة</th></tr>
+<tr><td>"Encapsulation = نخلي الـ fields private"</td><td>الـ private وسيلة مش هدف. الهدف هو <b>حماية الـ invariants</b>: القواعد اللي لازم تفضل صحيحة طول عمر الـ object (رصيد مش سالب، طلب مش بيتشحن من غير دفع). لو عملت كل field <code>private</code> وضفت لكل واحد <code>get; set;</code> عامة، رجعت لنفس المشكلة بأسماء تانية (وده اسمه Anemic Model).</td></tr>
+<tr><td>"Encapsulation = Data Hiding"</td><td>الإخفاء جزء منها. الفكرة الأكبر إن الـ class يضمن بنفسه إنه دايمًا في حالة صالحة.</td></tr>
+<tr><td>"الـ private بيحمي البيانات"</td><td>ده حماية <b>للمبرمجين من بعض</b> وقت الـ compile، مش حماية أمنية. الـ reflection بيقدر يقرا ويكتب أي private field لو الـ code مسموح له. متعتمدش عليه لحماية أسرار.</td></tr>
+</table></div>
+
+<div class="note why"><b>اختبار عملي</b>
+<p>اسأل: <b>"هل ممكن كود خارجي يحط الـ object ده في حالة غير صالحة؟"</b> لو الإجابة أيوه، الـ encapsulation ناقص مهما كانت الـ modifiers.</p></div>
+
+<h3>4.2) Access Modifiers كلها</h3>
+<div class="tw"><table>
+<tr><th>Modifier</th><th>مرئي فين</th></tr>
+<tr><td><code>public</code></td><td>في أي مكان</td></tr>
+<tr><td><code>internal</code></td><td>نفس الـ assembly (المشروع)</td></tr>
+<tr><td><code>protected</code></td><td>نفس الـ class والـ classes اللي بترث منه</td></tr>
+<tr><td><code>private</code></td><td>نفس الـ class فقط</td></tr>
+<tr><td><code>protected internal</code></td><td>الـ derived <b>أو</b> نفس الـ assembly</td></tr>
+<tr><td><code>private protected</code> (C# 7.2)</td><td>الـ derived <b>و</b> نفس الـ assembly معًا</td></tr>
+<tr><td><code>file</code> (C# 11)</td><td>نفس ملف الكود، للـ types فقط</td></tr>
+</table></div>
+<div class="note prod"><b>الـ defaults اللي بتوقّع</b>
+<ul>
+<li>أي member جوه class أو struct: <code>private</code> لو ما كتبتش حاجة.</li>
+<li>الـ type على المستوى الأعلى (top-level): <code>internal</code> مش <code>public</code>. لو نسيت <code>public</code> على class وحاولت تستخدمه من مشروع تاني، هتلاقي إنه "مش موجود".</li>
+<li>لو method <code>public</code> بترجّع type <code>internal</code> تطلع <code>CS0050</code> (inconsistent accessibility).</li>
+</ul></div>
+
+<h3>4.3) الـ Encapsulation الحقيقي: سلوك مش getters وsetters</h3>
+<pre class="bad" data-l="مفيش حماية: أي كود يقدر يكتب أي حالة"><code>public class Order { public OrderStatus Status { get; set; } }
+
+order.Status = OrderStatus.Shipped;   // من غير ما يتدفع ولا يتراجع</code></pre>
+<pre class="good" data-l="الـ class هو المسؤول عن القواعد (Tell, Don't Ask)"><code>public class Order
+{
+    public OrderStatus Status { get; private set; } = OrderStatus.New;
+
+    public void Pay()
+    {
+        if (Status != OrderStatus.New) throw new InvalidOperationException("Order is not payable");
+        Status = OrderStatus.Paid;
+    }
+    public void Ship()
+    {
+        if (Status != OrderStatus.Paid) throw new InvalidOperationException("Cannot ship an unpaid order");
+        Status = OrderStatus.Shipped;
+    }
+}</code></pre>
+<div class="note prod"><b>في الإنتاج</b>ده بالظبط نوع الثغرة اللي شرحناها في OWASP A06 (Insecure Design): قاعدة الـ business موجودة في الـ UI أو الـ controller بس، وأي endpoint تاني بيتخطاها. لما القاعدة تتحط داخل الـ class، بتتطبق من كل مكان.</div>
+
+<h3>4.4) تسريب الـ Internals (Leaky Encapsulation)</h3>
+<p>الشريحة 11 بتقول "التغيير جوه الـ class ما بيأثرش على اللي بره". ده صحيح <b>بس لو الـ class ما سرّبش تفاصيله</b>:</p>
+<pre class="bad" data-l="الـ field private، لكن الـ list نفسها مكشوفة"><code>public class Order
+{
+    private readonly List&lt;OrderLine&gt; _lines = new();
+    public List&lt;OrderLine&gt; Lines =&gt; _lines;      // ❌ order.Lines.Clear() من أي مكان
+    public IReadOnlyList&lt;OrderLine&gt; Lines2 =&gt; _lines;   // ⚠ ((List&lt;OrderLine&gt;)o.Lines2).Clear() لسه شغالة
+}</code></pre>
+<pre class="good" data-l="الحل: view للقراءة فقط + method للتعديل بقواعد"><code>public class Order
+{
+    private readonly List&lt;OrderLine&gt; _lines = new();
+    private readonly ReadOnlyCollection&lt;OrderLine&gt; _view;   // اتعمل مرة واحدة
+    public Order() { _view = _lines.AsReadOnly(); }
+
+    public IReadOnlyList&lt;OrderLine&gt; Lines =&gt; _view;          // wrapper مش list
+    public void AddLine(OrderLine l) { /* rules... */ _lines.Add(l); }
+}</code></pre>
+<div class="note myth"><b>مفهوم غلط: "readonly field = immutable"</b>
+<p>الـ <code>readonly</code> بيمنع إعادة <b>تعيين الـ reference</b> بس. محتويات الـ list لسه بتتغير. وعشان كده <code>_lines.AsReadOnly()</code> مهم: wrapper مش بتقدر ترجّعه لـ <code>List</code>.</p></div>
+
+<h3>4.5) تحليل مثال الـ Bank (الشريحة 13)</h3>
+<p>المثال كويس كبداية: الـ field private، والـ methods بتتحقق، والـ exceptions مناسبة. لكن فيه 4 نقاط لازم تعرفها:</p>
+<div class="tw"><table>
+<tr><th>النقطة</th><th>المشكلة</th><th>الحل</th></tr>
+<tr><td>الـ thread-safety</td><td><code>_balance += amount</code> عملية read-modify-write مش atomic. طلبين متوازيين ممكن يضيّعوا تحديث (lost update). كمان <code>decimal</code> حجمه 16 bytes فحتى القراءة مش مضمون تكون atomic (ممكن تقرا قيمة نص متحدّثة).</td><td><code>lock</code> حوالين القراءة والكتابة</td></tr>
+<tr><td>نوع الـ exception</td><td><code>ArgumentException</code> عامة، ومفيش <code>paramName</code></td><td><code>ArgumentOutOfRangeException(nameof(amount))</code></td></tr>
+<tr><td>الرصيد الناقص</td><td><code>InvalidOperationException</code> مقبولة، لكن اللي بيستدعي مش قادر يفرّق بينها وبين أي خطأ تاني</td><td>exception مخصص (<code>InsufficientFundsException</code>) بيشيل الرصيد والمبلغ المطلوب</td></tr>
+<tr><td>تكرار الـ validation</td><td><code>amount &lt;= 0</code> مكتوبة مرتين</td><td>helper خاص</td></tr>
+</table></div>
+<pre class="good" data-l="نسخة أقوى"><code>public sealed class InsufficientFundsException : InvalidOperationException
+{
+    public InsufficientFundsException(decimal balance, decimal requested)
+        : base($"Insufficient balance: {balance}, requested {requested}") { }
+}
+
+public sealed class BankAccount
+{
+    private readonly object _gate = new();
+    private decimal _balance;
+
+    public decimal Balance { get { lock (_gate) return _balance; } }
+
+    public void Deposit(decimal amount)
+    {
+        EnsurePositive(amount);
+        lock (_gate) _balance += amount;
+    }
+
+    public void Withdraw(decimal amount)
+    {
+        EnsurePositive(amount);
+        lock (_gate)
+        {
+            if (amount &gt; _balance) throw new InsufficientFundsException(_balance, amount);
+            _balance -= amount;
+        }
+    }
+
+    private static void EnsurePositive(decimal amount)
+    {
+        if (amount &lt;= 0) throw new ArgumentOutOfRangeException(nameof(amount), "Amount must be positive");
+    }
+}</code></pre>
+<pre class="neutral" data-l="جرّب الفرق: شغّله على نسخة الشريحة ثم على النسخة دي"><code>var acc = new BankAccount();
+Parallel.For(0, 100_000, _ =&gt; acc.Deposit(1));
+Console.WriteLine(acc.Balance);   // المتوقع 100000؛ بدون lock ممكن يطلع أقل (race)</code></pre>
+<div class="note cost"><b>Trade-off</b>
+<p>الـ <code>lock</code> بيحمي instance واحد جوه process واحد. في نظام حقيقي الحساب بيتحمّل من الـ database في كل request، فطلبين على سيرفرين مختلفين مش هيتحمواش بالـ lock. الحماية هناك بتيجي من الـ database: <b>optimistic concurrency</b> (عمود <code>RowVersion</code>) أو transaction بـ isolation مناسب. والـ encapsulation بيحمي الحالة جوه الميموري، والـ database بيحميها بين الـ requests.</p></div>
+
+<div class="note senior"><b>ملاحظة سينيور</b>
+<ul>
+<li>خلّي الـ classes <code>sealed</code> افتراضيًا إلا لو صممتها للوراثة: الوراثة بتفتح باب لكسر الـ invariants من الابن.</li>
+<li>لو محتاج اختبار كود <code>internal</code> استخدم <code>[assembly: InternalsVisibleTo("MyApp.Tests")]</code> بدل ما تخليه <code>public</code>.</li>
+<li><b>Law of Demeter:</b> <code>a.B.C.DoSomething()</code> معناها إنك عارف تفاصيل ما جوه a وB. الـ encapsulation الحقيقي إنك تقول <code>a.DoSomething()</code>.</li>
+</ul></div>
+</section>
+
+<!-- ===================== 5. PROPERTIES ===================== -->
+<section id="prop">
+<div class="risk-h"><span class="tag">شرايح 14 – 18</span><h2>5) Properties</h2></div>
+
+<div class="note analogy"><b>تشبيه</b>موظف الاستقبال في مبنى. مش بتدخل المخزن بنفسك، بتطلب من الموظف: هو بيتحقق منك، وبيجيب لك اللي مسموح لك بيه، وبيسجّل لو في حاجة اتغيّرت. ومن بره بيبان كأنك بتتعامل مع المخزن مباشرة.</div>
+
+<h3>5.1) الـ Property تحت الغطا: هي methods متنكّرة</h3>
+<div class="note why"><b>الميكانيزم</b>
+<p>الـ compiler بيحوّل كل property لـ method أو اتنين، وبيسجّل في الـ metadata إنهم مرتبطين باسم واحد:</p></div>
+<pre class="neutral" data-l="المترجم بيحوّل الاستخدام لـ method calls"><code>p.Name = "Ali";        // ↔ p.set_Name("Ali")
+var n = p.Name;        // ↔ p.get_Name()
+
+// وعشان كده الـ property ممكن: ترمي exception، تكون بطيئة، وليها side effects
+// (جرّب sharplab.io وشوف الـ IL: هتلاقي get_Name / set_Name)</code></pre>
+<div class="note myth"><b>مفهوم غلط: "الـ properties أبطأ من الـ fields"</b>
+<p>في الـ Release الـ JIT بيعمل <b>inline</b> للـ accessors البسيطة (زي <code>{ get; set; }</code>)، فالتكلفة تقريبًا صفر. في الـ Debug مفيش optimizations وبالتالي مفيش inlining، فالفرق ممكن يظهر هناك فقط.</p></div>
+
+<h3>5.2) ليه Property بدل public Field؟ (الأسباب الحقيقية)</h3>
+<p>الشريحة 14 و16 بتركّز على الـ validation. ده سبب واحد من سبعة:</p>
+<div class="tw"><table>
+<tr><th>السبب</th><th>public field</th><th>property</th></tr>
+<tr><td>Validation والـ invariants</td><td>مستحيل</td><td>في الـ setter</td></tr>
+<tr><td>التوافق الثنائي (Binary Compatibility)</td><td>لو حوّلته لـ property بعدين = <b>breaking change</b>: أي assembly اتعمله compile قبل كده يرمي <code>MissingFieldException</code> وقت التشغيل</td><td>تغيّر اللي جواها براحتك من غير ما تكسر حد</td></tr>
+<tr><td>الـ Serializers والـ ORM والـ Model Binding</td><td>كتير منها <b>بيتجاهل الـ fields</b></td><td>بتشتغل</td></tr>
+<tr><td>الـ Interfaces</td><td>ما ينفعش تعرّف field في interface</td><td>ينفع تعرّف property</td></tr>
+<tr><td>Change notification (<code>INotifyPropertyChanged</code>)</td><td>مستحيل</td><td>تحط logic في الـ setter</td></tr>
+<tr><td><code>ref</code> / <code>out</code> / <code>Interlocked</code></td><td>شغّال</td><td>❌ <code>CS0206</code> (property ما ينفعش تتبعت by ref)</td></tr>
+<tr><td>تعديل member جوه struct</td><td><code>obj.F.X = 1</code> شغّال</td><td>❌ <code>CS1612</code> (الـ getter بيرجّع نسخة)</td></tr>
+</table></div>
+<pre class="bad" data-l="باج إنتاج حقيقي: الـ field بيتجاهله الـ serializer"><code>public class Dto { public int Id; }
+
+JsonSerializer.Serialize(new Dto { Id = 1 });   // "{}"  ← System.Text.Json بيتجاهل الـ fields افتراضيًا</code></pre>
+<div class="note prod"><b>في الإنتاج</b>الـ endpoint بيرجّع JSON فاضي أو الـ request body بيتحمّل بقيم صفرية، من غير error. السبب إن الـ serializer أو الـ model binder بيتعامل مع الـ properties بس. وده من أشهر الأخطاء لما حد ينقل كود من fields لـ DTOs.</div>
+
+<div class="note myth"><b>تصحيح على جدول الشريحة 16</b>
+<ul>
+<li>الشريحة بتقول عن الـ Field "Always read/write (if public)". ده مش دقيق: الـ <code>readonly</code> field موجود ومتاح تقرأه وبس (وتكتبه في الـ constructor).</li>
+<li>الـ <b>private field</b> مش مشكلة أصلًا، بالعكس: هو الـ backing field اللي بتحمي بيه الـ property. المشكلة في الـ <b>public</b> field بس.</li>
+<li>الـ auto-property <code>{ get; set; }</code> لوحدها مش encapsulation: هي "ضمان مستقبلي" (تقدر تضيف logic بعدين من غير ما تكسر حد)، لكنها النهاردة بتسمح بأي قيمة زي الـ public field بالظبط.</li>
+</ul></div>
+
+<h3>5.3) هيكل الـ Property (الشريحة 15) والباج المخفي فيه</h3>
+<pre class="bad" data-l="كود الشريحة: الـ setter بيحمي، صح؟ لأ"><code>public class Person
+{
+    private string _name;
+    public string Name
+    {
+        get { return _name; }
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value)) throw new ArgumentException("Name cannot be empty");
+            _name = value;
+        }
+    }
+}
+
+var p = new Person();
+Console.WriteLine(p.Name.Length);   // 💥 NullReferenceException: الـ setter محدش ندهه أصلًا</code></pre>
+<div class="note why"><b>ليه؟</b>الـ setter بيحمي التغييرات <b>بعد</b> الإنشاء. لكن الـ object اتولد بالفعل بـ <code>_name = null</code> (الـ default)، يعني الـ invariant "الاسم مش فاضي" اتكسر من اللحظة صفر. الـ invariants لازم تتأسس في الـ <b>constructor</b> مش بس في الـ setters.</div>
+<pre class="good" data-l="ثلاث حلول ممكنة"><code>// 1) القيمة الأولية صالحة
+public string Name { get; set; } = string.Empty;
+
+// 2) constructor بيمر على نفس الـ validation
+public Person(string name) { Name = name; }
+
+// 3) إجباري وقت الإنشاء (C# 11)
+public required string Name { get; set; }</code></pre>
+
+<div class="note cost"><b>Trade-off: الـ exception في الـ setter</b>
+<ul>
+<li>الـ serializers والـ model binders بيتعاملوا مع الـ setter، فالـ exception هيظهر كـ 500 أو كـ خطأ deserialization مش كـ 400 مفهوم للعميل. الأفضل تتحقق من الـ input على الحدود (DataAnnotations أو FluentValidation) وترجّع 400، وتخلّي الـ domain object يحمي الـ invariants الداخلية.</li>
+<li>EF Core بشكل افتراضي غالبًا بيكتب في الـ backing field مباشرة وقت تحميل الـ entity، فالـ setter validation مش بيتنفذ على الداتا اللي جاية من الـ database. ده كويس (متكسرش التحميل) لكنه معناه إن داتا غلط في الـ DB مش هتتكتشف من الـ setter.</li>
+</ul></div>
+
+<h3>5.4) الأنواع الثمانية (الشريحة 18) في جدول واحد</h3>
+<div class="tw"><table>
+<tr><th>النوع</th><th>الشكل</th><th>قراءة / كتابة</th><th>متى</th><th>الفخ</th></tr>
+<tr><td>Read/Write</td><td><code>{ get; set; }</code></td><td>✅ / ✅</td><td>DTOs بسيطة</td><td>مفيش حماية</td></tr>
+<tr><td>Read-Only</td><td><code>{ get; }</code></td><td>✅ / ❌ (ctor بس)</td><td>Ids، Value Objects</td><td>read-only ≠ immutable</td></tr>
+<tr><td>Write-Only</td><td><code>{ set { } }</code></td><td>❌ / ✅</td><td>تقريبًا أبدًا</td><td>Design smell</td></tr>
+<tr><td>Auto-Implemented</td><td><code>{ get; set; }</code></td><td>✅ / ✅</td><td>الأغلب</td><td>مفيش validation</td></tr>
+<tr><td>Private Setter</td><td><code>{ get; private set; }</code></td><td>✅ / جوه الـ class</td><td>Entities ليها state بتتغير</td><td>أي method جوه الـ class تتخطى القواعد</td></tr>
+<tr><td>Computed</td><td><code>=&gt; Width * Height</code></td><td>✅ / ❌</td><td>قيمة مشتقة</td><td>بتتحسب كل قراءة</td></tr>
+<tr><td>Expression-Bodied</td><td><code>get =&gt; _name;</code></td><td>حسب الـ accessors</td><td>اختصار كتابة</td><td>C# 6 vs C# 7</td></tr>
+<tr><td>Init-Only (C# 9)</td><td><code>{ get; init; }</code></td><td>✅ / وقت الإنشاء</td><td>DTOs وconfig immutable</td><td>reflection بيتخطاه</td></tr>
+</table></div>
+
+<h3>تفاصيل كل نوع مهم</h3>
+
+<p><b>Read-Only مش Immutable:</b></p>
+<pre class="bad" data-l="get-only بس المحتوى لسه بيتغير"><code>public List&lt;int&gt; Items { get; } = new();
+obj.Items.Add(5);      // ✅ بتنجح: منعنا إعادة التعيين مش تعديل المحتوى</code></pre>
+
+<p><b>Write-Only (الشريحة 18، الرقم 3): Design Smell:</b> الـ Framework Design Guidelines بتقول صراحة إنك <b>ما تعملش set-only properties</b>: الـ property من المفروض تبان كـ field، وحاجة تكتبها وما تعرفش تقراها غريبة. البديل: method (<code>SetPassword(...)</code>).</p>
+<div class="note prod"><b>في الإنتاج (وربطها بـ OWASP A04)</b>مثال الشريحة بيخزّن <code>_password</code> كنص عادي. الـ Password ما يتخزنش plain text أبدًا. الـ method لازم تعمل hash فورًا (استخدم <code>PasswordHasher&lt;T&gt;</code>) وتخزّن الـ hash بس.</div>
+
+<p><b>Private Setter مقابل Init مقابل get-only:</b></p>
+<div class="tw"><table>
+<tr><th></th><th><code>{ get; }</code></th><th><code>{ get; init; }</code></th><th><code>{ get; private set; }</code></th></tr>
+<tr><td>التعيين في الـ constructor</td><td>✅</td><td>✅</td><td>✅</td></tr>
+<tr><td>Object initializer من بره</td><td>❌</td><td>✅</td><td>❌</td></tr>
+<tr><td>التعديل بعد الإنشاء من جوه الـ class</td><td>❌</td><td>❌</td><td>✅ (أي method)</td></tr>
+<tr><td>التعديل بعد الإنشاء من بره</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td><code>with</code> expression (مع record/struct)</td><td>—</td><td>✅</td><td>❌</td></tr>
+<tr><td>مناسب لـ</td><td>Value Objects وIds</td><td>DTOs وconfig</td><td>Entities ليها lifecycle</td></tr>
+</table></div>
+
+<p><b>Init-Only (C# 9): إيه اللي بيحصل فعلًا؟</b> الـ <code>init</code> هو <code>set</code> عادي في الـ IL لكن معاه علامة <code>modreq(IsExternalInit)</code> بتخلّي الـ <b>compiler</b> يمنع الاستدعاء بعد الإنشاء. يعني الحماية compile-time بس، والـ reflection يقدر يكتب فيه. وكمان <code>init</code> لوحدها مش بتضمن إن القيمة اتعيّنت:</p>
+<pre class="good" data-l="required + init: إجبار + immutability"><code>public class User
+{
+    public required string Email { get; init; }
+    public string? Nick { get; init; }
+}
+
+var u = new User { Email = "a@b.com" };   // ✅
+// var v = new User();                    // ❌ CS9035: Required member 'User.Email' must be set</code></pre>
+<div class="note cost"><b>حدود</b>الـ <code>required</code> بيضمن <b>إن القيمة اتعيّنت</b>، مش إنها صالحة (لسه ممكن تبعت <code>""</code>). الـ validation منفصل.</div>
+
+<p><b>Computed Property (الشريحة 18): مش مجانية:</b></p>
+<pre class="bad" data-l="الـ getter بيتنفذ كل مرة: O(n) جوه loop = O(n²)"><code>public decimal Total =&gt; _lines.Sum(l =&gt; l.Price * l.Qty);
+
+for (int i = 0; i &lt; 1000; i++)
+    if (order.Total &gt; 100) { ... }       // بتحسب Total ألف مرة</code></pre>
+<div class="note prod"><b>في الإنتاج</b>الـ debugger (نافذة Locals وWatch) بيقيّم الـ properties تلقائيًا. لو الـ getter بيعمل query أو بيغيّر حالة، هتلاقي باج ما بيظهرش غير وأنت بتـdebug، أو بيظهر بس في الـ Release (Heisenbug). القاعدة: <b>الـ getter لازم يبقى سريع، ومن غير side effects، ونفس النتيجة لو ما اتغيرتش الحالة</b>. غير كده، خليه method (<code>CalculateTotal()</code>).</div>
+
+<p><b>Expression-Bodied: تصحيح للشريحة:</b> الشريحة بتقول "C# 6.0+" لكن النسخة اللي في المثال (<code>get =&gt; _name; set =&gt; _name = value;</code>) محتاجة <b>C# 7.0</b>. الـ C# 6 كان بيدعم الـ methods والـ get-only properties بس (<code>public int Area =&gt; W * H;</code>). التوسعة للـ constructors والـ accessors والـ indexers جت في C# 7.0. والـ IL نفسه ما بيتغيرش: سكر syntax.</p>
+
+<h3>5.5) Property بترجّع نسخة: فخين تقيلين</h3>
+<pre class="bad" data-l="1) ترجّع نسخة جديدة من الـ collection في كل استدعاء"><code>public List&lt;int&gt; Items =&gt; new List&lt;int&gt;(_items);
+
+order.Items.Add(5);   // ✅ بتنجح، ومفيش أي أثر، ومفيش error!</code></pre>
+<pre class="bad" data-l="2) property من نوع struct: الـ getter بيرجّع نسخة (ربط مع القسم 2)"><code>class Shape { public Point Origin { get; set; } }
+var s = new Shape();
+// s.Origin.X = 5;                    // ❌ CS1612</code></pre>
+<pre class="good" data-l="الحل: اكتب قيمة جديدة (مع readonly record struct)"><code>s.Origin = s.Origin with { X = 5 };   // ✅ (لو Point هو record struct)</code></pre>
+
+<h3>5.6) Nullable Reference Types: الـ Warning اللي هتقابله</h3>
+<pre class="neutral" data-l="CS8618 مع أي property من نوع string غير nullable"><code>public string Name { get; set; }     // ⚠ CS8618: مش مهيّأة لما الـ constructor يخلّص
+
+// الحلول (اختار حسب النية):
+public string Name { get; set; } = string.Empty;   // قيمة أولية معقولة
+public required string Name { get; set; }          // إجباري وقت الإنشاء
+public string? Name { get; set; }                  // القيمة الفاضية جزء من المعنى
+// = null!  ← بس لو ORM أو serializer هيعيّنها وأنت عارف ليه</code></pre>
+
+<h3>5.7) الـ <code>field</code> keyword (C# 14 / .NET 10)</h3>
+<pre class="neutral" data-l="بدل ما تكتب backing field يدوي لمجرد validation"><code>public string Name
+{
+    get;
+    set =&gt; field = value?.Trim() ?? throw new ArgumentNullException(nameof(value));
+}</code></pre>
+<p>الـ <code>field</code> هو الـ backing field اللي المترجم بيولّده. بيلغي الحاجة للـ <code>_name</code> اليدوي لما يكون كل اللي محتاجه تعديل بسيط في get أو set. متاح من C# 14 (مع .NET 10).</p>
+
+<h3>5.8) Property ولا Method؟</h3>
+<div class="tw"><table>
+<tr><th>اختار Property لما</th><th>اختار Method لما</th></tr>
+<tr><td>القراءة سريعة (زي قراءة field)</td><td>العملية غالية أو فيها I/O</td></tr>
+<tr><td>مفيش side effects</td><td>بتغيّر حالة الـ object أو حاجة تانية</td></tr>
+<tr><td>نفس النتيجة لو ما اتغيرتش الحالة</td><td>نتيجة مختلفة في كل مرة (<code>Guid.NewGuid()</code>)</td></tr>
+<tr><td>الترتيب ما يفرقش (مش لازم أنادي حاجة قبلها)</td><td>محتاجة parameters أو ترتيب معين</td></tr>
+</table></div>
+
+<div class="note senior"><b>ملاحظة سينيور</b>
+<ul>
+<li><b>Property Injection في الـ DI</b> بيخلّي الـ dependency اختيارية ومخفية. الأفضل constructor injection لأن الـ dependencies بتبان في التوقيع والـ object مش بيتعمل ناقص.</li>
+<li>الـ Domain Entities في الـ DDD بتتصمم بـ <code>private set</code> وmethods بأسماء الـ business (<code>Ship()</code>)، بينما الـ DTOs بتتصمم بـ <code>init</code>. الفرق بين "Entity" و"DTO" هو نفس الفرق بين "له سلوك يحميه" و"مجرد داتا بتتنقل".</li>
+<li>الـ Auto-Property بتضيف backing field اسمه <code>&lt;Name&gt;k__BackingField</code> (مش بيظهر في الكود، بيظهر في الـ reflection والـ debugger). وقت ما serializer بيشتغل على الـ fields مش الـ properties (زي BinaryFormatter القديم) الاسم ده هو اللي بيظهر.</li>
+</ul></div>
+</section>
+
+<!-- ===================== 6. INDEXERS ===================== -->
+<section id="indexer">
+<div class="risk-h"><span class="tag">شرايح 19 – 20</span><h2>6) Indexers</h2></div>
+
+<div class="note analogy"><b>تشبيه</b>فهرس الكتاب: بتقول "الصفحة 42" أو "كلمة X" وبيجيبلك اللي عايزه، من غير ما تعرف الكتاب مترتب ازاي من جوه. الـ indexer هو الفهرس اللي بتحطه على الـ class بتاعك.</div>
+
+<h3>6.1) الـ Indexer تحت الغطا: property اسمها <code>Item</code></h3>
+<div class="note why"><b>الميكانيزم</b>
+<p>الـ indexer مش syntax خاص في الـ CLR. هو <b>property عادية معاها parameters</b>. المترجم بيولّدلها <code>get_Item(index)</code> و<code>set_Item(index, value)</code>، وبيحط على الـ class attribute اسمه <code>[DefaultMember("Item")]</code> عشان اللغات التانية تعرف إن للـ class ده default indexed property.</p></div>
+<div class="note why"><b>ليه اسمها Item؟ وليه ممكن تتغير؟</b>
+<p>الـ CLR نفسه ما فيهوش مفهوم <code>[]</code>: اللي فيه هو properties بتاخد parameters، وكل لغة بتعرضها بطريقتها (C# بـ <code>[]</code>). عشان كده لازم يبقى ليها اسم في الـ metadata. وتقدر تغيّره بـ <code>[IndexerName("Number")]</code> (الـ <code>string</code> نفسها indexer بتاعها اسمه <code>Chars</code>).</p></div>
+<div class="note prod"><b>في الإنتاج</b>لو عرّفت indexer وعرّفت كمان member اسمه <code>Item</code> في نفس الـ class تطلع <code>CS0102</code> (تعريف مكرر)، لأن الاتنين بيتحوّلوا لنفس الاسم في الـ metadata.</div>
+
+<h3>6.2) قواعد الشريحة 20: ليه هي كده؟</h3>
+<div class="tw"><table>
+<tr><th>القاعدة</th><th>السبب</th></tr>
+<tr><td>لازم <code>get</code> أو <code>set</code> على الأقل</td><td>indexer من غير accessors مالوش معنى</td></tr>
+<tr><td>ينفع overloads بـ parameter lists مختلفة</td><td>الـ signature هو الـ parameter list بس (زي الـ methods). الـ return type مش جزء منه</td></tr>
+<tr><td>ممنوع <code>static</code></td><td>الـ indexer بيتعرّف بـ <code>this[...]</code> فهو مربوط بـ instance بالتعريف. لو عايز مفهوم مشابه استخدم static method</td></tr>
+<tr><td>الـ accessor modifier مسموح بس لو الـ indexer فيه <code>get</code> و<code>set</code> الاتنين</td><td>لو فيه accessor واحد، تقييده معناه إن الـ indexer نفسه أضيق، يعني الـ modifier بتاعه هو اللي المفروض يتعدل</td></tr>
+<tr><td>واحد بس من الـ accessors ممكن ياخد modifier</td><td>إمكانية الوصول للـ indexer = الأوسع بين الـ accessors. لو الاتنين اتقيّدوا، الـ modifier بتاع الـ indexer نفسه هيبقى بلا معنى</td></tr>
+<tr><td>الـ modifier لازم يكون <b>أضيق</b> من الـ indexer</td><td>accessor أوسع من الـ member اللي بيمثله ما ينفعش (تناقض)</td></tr>
+<tr><td>ينفع parameter أو أكتر</td><td>عشان المصفوفات متعددة الأبعاد (<code>this[int row, int col]</code>)</td></tr>
+<tr><td>الـ parameters ما ينفعش تبقى <code>ref</code> أو <code>out</code></td><td>غالبًا لأن صيغة <code>[]</code> عند الاستدعاء مالهاش طريقة تعبّر عن <code>ref</code>/<code>out</code></td></tr>
+</table></div>
+<div class="note myth"><b>مفهوم غلط</b>"الـ indexer = array". الـ array بيحتوي على bounds check بيعمله الـ runtime. الـ indexer <b>كود عادي بتكتبه أنت</b>: ممكن ياخد string أو Guid كـ key، وممكن يعمل أي حاجة. ولو ما كتبتش validation، مفيش حاجة هتحميك.</div>
+
+<h3>6.3) مثال كامل: <code>PhoneNoteBook</code> (الشريحة 20 بتفترضه ومبتوريهوش)</h3>
+<pre class="good" data-l="نسخة صحيحة: الرقم string، والمقارنة case-insensitive، والسلوك عند الغياب محدد"><code>public class PhoneNoteBook
+{
+    private readonly Dictionary&lt;string, string&gt; _numbers =
+        new(StringComparer.OrdinalIgnoreCase);
+
+    public string this[string name]
+    {
+        get =&gt; _numbers.TryGetValue(name, out var n)
+            ? n
+            : throw new KeyNotFoundException($"'{name}' not found");
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException("Number is required", nameof(value));
+            _numbers[name] = value;          // بيضيف لو مش موجود، وبيستبدل لو موجود
+        }
+    }
+
+    public bool TryGet(string name, out string? number) =&gt; _numbers.TryGetValue(name, out number);
+    public bool Remove(string name) =&gt; _numbers.Remove(name);
+    public int Count =&gt; _numbers.Count;
+}
+
+var book = new PhoneNoteBook();
+book["Ali"] = "01012345678";
+Console.WriteLine(book["ali"]);   // شغّال: OrdinalIgnoreCase</code></pre>
+
+<div class="note myth"><b>تصحيح على الشريحة 20</b>
+<ul>
+<li>اللوحتين في نفس الشريحة بيستخدموا نوعين مختلفين: اللوحة الشمال <code>book["Ali"] = "123456"</code> (string) واللوحة اليمين <code>book["Ali"] = 12345</code> (int). ما ينفعش الاتنين مع نفس الـ class.</li>
+<li>رقم التليفون <b>لازم يبقى string</b>. الـ <code>int</code> بيشيل الصفر اللي في الأول (<code>01012345678</code> بتبقى <code>1012345678</code>)، والرقم مع كود الدولة (<code>201012345678</code>) أكبر من <code>int.MaxValue</code> (2,147,483,647) فبيعمل overflow. الأرقام اللي مش بنعمل عليها عمليات حسابية بتتخزن string (أكواد بريدية، أرقام قومية، حسابات بنكية).</li>
+</ul></div>
+
+<h3>6.4) عقد الـ Indexer: بيعمل إيه لو المفتاح مش موجود؟</h3>
+<div class="tw"><table>
+<tr><th>السلوك</th><th>مثال في .NET</th><th>متى</th><th>التكلفة</th></tr>
+<tr><td>يرمي exception</td><td><code>Dictionary</code>: <code>KeyNotFoundException</code></td><td>الغياب معناه bug</td><td>الـ exception غالية لو الغياب متكرر</td></tr>
+<tr><td>يرجّع <code>null</code>/default</td><td><code>NameValueCollection</code> بيرجّع null</td><td>الغياب طبيعي</td><td>الـ null بتنتشر وتطلع بعدين كـ NullReferenceException</td></tr>
+<tr><td>method <code>TryGet</code> (بدل indexer)</td><td><code>TryGetValue</code></td><td>الغياب طبيعي ومتكرر</td><td>الـ syntax أطول</td></tr>
+</table></div>
+<pre class="bad" data-l="نمط شائع: بيعمل lookup مرتين"><code>if (dict.ContainsKey(k)) v = dict[k];     // hash + lookup مرتين</code></pre>
+<pre class="good" data-l="الأفضل"><code>if (dict.TryGetValue(k, out var v)) { ... }   // مرة واحدة</code></pre>
+
+<h3>6.5) Overloading و Multi-Dimensional</h3>
+<pre class="neutral" data-l="أكتر من indexer في class واحد"><code>public class Grid
+{
+    private readonly int[,] _cells = new int[3, 3];
+    public int this[int row, int col]
+    {
+        get =&gt; _cells[row, col];
+        set =&gt; _cells[row, col] = value;
+    }
+}
+
+public class Weekdays
+{
+    private readonly string[] _d = { "Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri" };
+    public string this[int i] =&gt; _d[i];
+    public int this[string name] =&gt; Array.IndexOf(_d, name);   // overload على نوع الـ index
+}</code></pre>
+
+<h3>6.6) Index و Range (C# 8): ميزة بتشتغل على الـ class بتاعك</h3>
+<pre class="neutral" data-l="^1 بتشتغل لو الـ class عنده Count/Length و indexer بـ int"><code>public class Playlist
+{
+    private readonly List&lt;string&gt; _songs = new() { "a", "b", "c" };
+    public int Count =&gt; _songs.Count;
+    public string this[int i] =&gt; _songs[i];
+}
+
+var pl = new Playlist();
+var last = pl[^1];    // المترجم بيحوّلها لـ pl[pl.Count - 1] من غير ما تكتب this[Index]</code></pre>
+<p>ده اسمه <b>Implicit Index Support</b>: نمط بيتعرف عليه المترجم (pattern-based) مش interface. والـ ranges (<code>pl[1..]</code>) محتاجة method اسمها <code>Slice(int start, int length)</code> أو indexer بـ <code>Range</code>.</p>
+
+<h3>6.7) الـ Ref-Returning Indexer: الحل لمشكلة الـ struct (ربط مع القسم 2)</h3>
+<pre class="good" data-l="الـ indexer بيرجّع reference للعنصر الأصلي مش نسخة"><code>public class PointBuffer
+{
+    private readonly Point[] _items = new Point[10];
+    public ref Point this[int i] =&gt; ref _items[i];
+}
+
+var buf = new PointBuffer();
+buf[0].X = 10;                 // ✅ بيعدّل العنصر الأصلي (على عكس List&lt;Point&gt;)
+
+// نفس الفكرة مع List&lt;T&gt; (احذر: ما تضيفش/تشيلش عناصر وأنت ماسك الـ span)
+// CollectionsMarshal.AsSpan(list)[0].X = 10;</code></pre>
+<p>ده بالظبط اللي <code>Span&lt;T&gt;</code> بيعمله عشان <code>span[i] = x</code> تكتب في المكان الأصلي. وفيه سبب إن <code>List&lt;Point&gt;</code> indexer مش <code>ref</code>: الـ <code>List</code> ممكن يعيد تخصيص الـ array الداخلي، فأي reference متسلّم من قبل كده هيبقى معلّق (dangling).</p>
+
+<h3>6.8) Indexer ولا Method ولا Property؟</h3>
+<div class="tw"><table>
+<tr><th></th><th>Indexer</th><th>Method (<code>Get(key)</code>)</th><th>Property</th></tr>
+<tr><td>الصيغة</td><td><code>obj[key]</code></td><td><code>obj.Get(key)</code></td><td><code>obj.Name</code></td></tr>
+<tr><td>يقبل <code>out</code> / optional / named</td><td>❌</td><td>✅</td><td>—</td></tr>
+<tr><td>المعنى</td><td>الـ object نفسه مجموعة عناصر بمفتاح</td><td>عملية</td><td>صفة</td></tr>
+<tr><td>استخدمه لما</td><td>الـ class فعلًا collection-like والمفتاح واضح</td><td>العملية مش "قراءة عنصر" أو محتاج <code>out</code></td><td>قيمة واحدة ثابتة الاسم</td></tr>
+</table></div>
+
+<div class="note senior"><b>ملاحظة سينيور</b>
+<ul>
+<li>الـ indexer <b>لازم يبان O(1)</b> للي بيستخدمه. عشان كده <code>LinkedList&lt;T&gt;</code> ما فيهوش indexer عن قصد: <code>list[i]</code> فيها O(n) هتضلّل. وكذلك indexer بيعمل query على الـ database (<code>repo[42]</code>) smell: بيخفي تكلفة I/O ورا syntax رخيصة.</li>
+<li><code>Dictionary</code> وindexer الكتابة بتاعه <b>مش thread-safe</b>. الكتابة المتوازية بتبوّظ الحالة الداخلية. استخدم <code>ConcurrentDictionary</code> أو lock.</li>
+<li>الـ interfaces زي <code>IReadOnlyList&lt;T&gt;</code> و<code>IReadOnlyDictionary&lt;K,V&gt;</code> بتعرّف indexers. لو صمّمت API، عرّض <code>IReadOnly...</code> بدل الـ class الملموس (ربط بقسم 4.4).</li>
+</ul></div>
+</section>
+
+<!-- ===================== SLIDE ERRORS ===================== -->
+<section id="slide-errors">
+<h2>أخطاء ومحاذير في الشرايح نفسها</h2>
+<p>ده جزء من قاعدتي: لو في حاجة مش دقيقة أقولها بوضوح. دي مش تقليل من الشرح (الشرايح كويسة كمدخل)، لكن بعض الحاجات تبسيط مخل أو typo:</p>
+<div class="tw"><table>
+<tr><th>الشريحة</th><th>المكتوب</th><th>التصحيح</th></tr>
+<tr><td>4</td><td>الـ Order بيطلب delivery من Car</td><td>توضيحي فقط. التصميم الحقيقي بيسمّي مسؤوليات (<code>DeliveryService</code>)، مش أشياء واقعية (قسم 1)</td></tr>
+<tr><td>5</td><td>"Stored on the stack"</td><td>بيتخزن inline في اللي شايله (قسم 2.2)</td></tr>
+<tr><td>5</td><td>"Cannot inherit from other structs or classes"</td><td>بيرث من <code>ValueType</code>، وبيطبّق interfaces، ومحدش يرث منه (2.6)</td></tr>
+<tr><td>8</td><td>"attribute initialization"</td><td>المصطلح الصح: <b>fields</b> (3.4)</td></tr>
+<tr><td>8</td><td>لوحة C# 10</td><td>مبتذكرش parameterless ctor وfield initializers. و<code>new Point(5)</code> بيفشل لعدم وجود overload (3.4)</td></tr>
+<tr><td>9</td><td>public fields وتكرار التعيين</td><td>properties + constructor chaining (3.5)</td></tr>
+<tr><td>10</td><td><code>p1.X = 10; p1.X = 20;</code></td><td><b>typo</b>: التانية لازم <code>p1.Y = 20</code>. بالشكل المكتوب الناتج الفعلي <code>(20, 0)</code> مش <code>(10, 20)</code></td></tr>
+<tr><td>13</td><td>BankAccount</td><td>مش thread-safe، والـ exception عامة بلا <code>paramName</code> (4.5)</td></tr>
+<tr><td>15</td><td>الـ setter بيحمي الاسم</td><td>الـ <code>Person</code> بيتولد بـ <code>Name = null</code> (5.3)</td></tr>
+<tr><td>16</td><td>Field: "Always read/write (if public)"</td><td>الـ <code>readonly</code> field موجود (5.2)</td></tr>
+<tr><td>17</td><td><code>name</code> و<code>age</code> public بحروف صغيرة</td><td>الـ public members بـ PascalCase حسب الـ convention</td></tr>
+<tr><td>18</td><td>Write-Only Password</td><td>Design smell + تخزين plain text (5.4)</td></tr>
+<tr><td>18</td><td>Expression-Bodied "C# 6.0+"</td><td><code>get =&gt;</code> و<code>set =&gt;</code> محتاجين C# 7.0 (5.4)</td></tr>
+<tr><td>20</td><td>لوحتين بنوعين مختلفين + رقم كـ int</td><td>string للرقم، ونوع واحد للـ class (6.3)</td></tr>
+</table></div>
+</section>
+
+<!-- ===================== INTERVIEW ===================== -->
+<section id="interview">
+<h2>أسئلة مقابلات (مع الإجابات)</h2>
+<p>جاوب الأول في دماغك، وبعدين افتح الإجابة.</p>
+
+<details><summary>1) هل الـ struct بيتخزن على الـ stack دايمًا؟</summary>
+<p>لأ. بيتخزن في المكان اللي معرَّف فيه: local عادي (stack أو register)، أو جوه الـ heap لو كان field في class أو عنصر في array أو captured في closure أو boxed. النوع الوحيد المضمون stack-only هو <code>ref struct</code>.</p></details>
+
+<details><summary>2) ليه <code>list[0].X = 5</code> بتفشل لو list من struct، لكن <code>arr[0].X = 5</code> بتنجح؟</summary>
+<p>indexer الـ <code>List&lt;T&gt;</code> بيرجّع <b>نسخة</b> (getter عادي)، فالتعديل على قيمة مؤقتة والـ compiler بيمنعه (<code>CS1612</code>). عنصر الـ array هو variable حقيقي، فبتعدله مباشرة.</p></details>
+
+<details><summary>3) إيه اللي بيحصل لو كتبت constructor بـ parameters في class؟</summary>
+<p>الـ default parameterless constructor بيختفي. أي كود بينشئ الـ object بدون arguments (<code>new T()</code> constraint، أو serializers، أو <code>Activator</code>) هيفشل، وأحيانًا وقت التشغيل مش وقت الـ compile.</p></details>
+
+<details><summary>4) إيه ترتيب التهيئة لما class B يرث من A؟</summary>
+<p>field initializers في B، بعدين field initializers في A، بعدين constructor بتاع A، وأخيرًا constructor بتاع B.</p></details>
+
+<details><summary>5) ليه ما ننادّيش virtual method من constructor؟</summary>
+<p>لأنها هتنفذ override الابن قبل ما constructor الابن ينفذ، فالابن لسه في حالة غير مكتملة (fields اللي بتتعيّن في الـ constructor لسه null أو default).</p></details>
+
+<details><summary>6) الفرق بين <code>{ get; }</code> و<code>{ get; init; }</code> و<code>{ get; private set; }</code>؟</summary>
+<p>الأولى تتعيّن في constructor بس. التانية تتعيّن في constructor أو object initializer وبعدها تتقفل. التالتة تتعدّل في أي وقت من جوه الـ class (فأي method تقدر تتخطى القواعد). الأولى والتانية للـ immutability، والتالتة للـ entities ليها state بتتغير.</p></details>
+
+<details><summary>7) هل الـ auto-property <code>{ get; set; }</code> يعتبر encapsulation؟</summary>
+<p>مش بحد ذاته. هي بتسمح بأي قيمة زي الـ public field. قيمتها إنها "ضمان مستقبلي": تقدر تضيف logic بعدين من غير ما تكسر الـ binary compatibility، وبتشتغل مع serializers والـ interfaces.</p></details>
+
+<details><summary>8) متى تعمل property ومتى method؟</summary>
+<p>property لو القراءة سريعة ومن غير side effects ونفس النتيجة لنفس الحالة. غير كده method (لو غالية أو فيها I/O أو بتغيّر حاجة أو محتاجة parameters).</p></details>
+
+<details><summary>9) ليه الـ optional parameters خطر في مكتبة عامة؟</summary>
+<p>القيمة الافتراضية بتتكتب جوه الـ IL بتاع المستدعي وقت الـ compile. لو غيّرت الـ default في نسخة جديدة، الـ assemblies القديمة لسه بتبعت القيمة القديمة لحد ما تتعمل recompile. الأمان: استخدم overloads.</p></details>
+
+<details><summary>10) إيه الفرق بين <code>const</code> و<code>static readonly</code> و<code>readonly</code> field؟</summary>
+<p><code>const</code> قيمة ثابتة وقت الـ compile وبتتحرق في كود المستدعي (نفس فخ optional parameters). <code>readonly</code> بيتعيّن وقت التشغيل في constructor أو initializer، وكل instance ممكن ياخد قيمة مختلفة. <code>static readonly</code> بيتعيّن مرة واحدة للـ type كله وقت التشغيل. لو القيمة ممكن تتغير بين إصدارات المكتبة، استخدم <code>static readonly</code>.</p></details>
+
+<details><summary>11) ليه ما ينفعش يبقى فيه indexer static؟</summary>
+<p>لأنه معرَّف بـ <code>this[...]</code> فهو مربوط بـ instance بالتعريف. الـ static مالوش <code>this</code>.</p></details>
+
+<details><summary>12) إيه هو الـ defensive copy؟ ومتى بيحصل؟</summary>
+<p>لما تنادي method على struct متخزن في <code>readonly</code> field (أو تمرره بـ <code>in</code>) وهو مش <code>readonly struct</code>، الـ compiler بيعمل نسخة مؤقتة عشان يضمن إن الـ method ما تعدّلش الأصل. نتيجته: الـ method بتشتغل على النسخة فالحالة الأصلية ما بتتغيرش، وتكلفة نسخ إضافية. الحل: <code>readonly struct</code>.</p></details>
+</section>
+
+<!-- ===================== EXERCISES ===================== -->
+<section id="exercises">
+<h2>تمارين (اكتب الكود بإيدك)</h2>
+<div class="tw"><table>
+<tr><th>#</th><th>التمرين</th><th>تلميح</th></tr>
+<tr><td>1</td><td>اعمل <code>readonly struct Money</code> فيه Amount وCurrency. الـ ctor يتحقق من الـ Currency (3 حروف). <code>Add</code> ترمي exception لو العملتين مختلفتين. طبّق <code>IEquatable&lt;Money&gt;</code>. استخدمه كـ Dictionary key وقِس الـ allocations.</td><td><code>GC.GetAllocatedBytesForCurrentThread()</code> قبل وبعد</td></tr>
+<tr><td>2</td><td>اعمل الأربع فخاخ في 2.7 (List indexer، foreach، property، readonly field) واكتب رقم الـ error جنب كل واحد. بعدين خلّي الـ struct <code>readonly</code> وشوف إزاي الـ compiler بيمنعهم كلهم.</td><td>ابدأ من <code>Counter</code></td></tr>
+<tr><td>3</td><td>حوّل <code>Student</code> من الشريحة 9 لـ immutable بـ constructor chaining، وبعدين نسخة تانية بـ <code>required</code> + <code>init</code>. قارن الاتنين واختار حسب استخدامك.</td><td>الـ chaining في 3.5</td></tr>
+<tr><td>4</td><td>اكتب unit test بيكسر <code>Person</code> من الشريحة 15، وأصلحه بالثلاث طرق في 5.3.</td><td>ابدأ بـ <code>new Person().Name.Length</code></td></tr>
+<tr><td>5</td><td>شغّل <code>Parallel.For</code> على <code>BankAccount</code> بتاع الشريحة، ولاحظ الـ lost updates. بعدين أضف lock. بعدين اعمل <code>Transfer(from, to, amount)</code> وفكّر: إزاي ممكن يحصل deadlock؟</td><td>lock ordering</td></tr>
+<tr><td>6</td><td>اعمل <code>PhoneNoteBook</code> بـ ctor بياخد <code>IEqualityComparer&lt;string&gt;</code>، وضيف <code>this[int index]</code> overload، وقرر سلوك المفتاح المفقود. دافع عن قرارك في سطرين.</td><td>القسم 6.4</td></tr>
+</table></div>
+</section>
+
+<!-- ===================== CHEAT SHEET ===================== -->
+<section id="cheat">
+<h2>Cheat Sheet: قرارات سريعة</h2>
+
+<h3>Class ولا Struct؟</h3>
+<div class="tw"><table>
+<tr><th>لو...</th><th>اختار</th></tr>
+<tr><td>النوع ليه هوية (Customer, Order) أو بيتعدّل كتير أو حجمه كبير أو محتاج inheritance</td><td>class</td></tr>
+<tr><td>قيمة صغيرة (أقل من ~16 bytes) وimmutable ومش هيتعمله boxing كتير (Money, Point, Color)</td><td><code>readonly struct</code> أو <code>readonly record struct</code></td></tr>
+<tr><td>مش متأكد</td><td>class، وقيس قبل ما تغيّر</td></tr>
+</table></div>
+
+<h3>اختار شكل الـ Property</h3>
+<div class="tw"><table>
+<tr><th>الاحتياج</th><th>الشكل</th></tr>
+<tr><td>DTO بسيط بيتقرا ويتكتب</td><td><code>{ get; set; }</code></td></tr>
+<tr><td>قيمة تتحدد وقت الإنشاء وتتقفل</td><td><code>{ get; init; }</code> (+ <code>required</code> لو إجبارية)</td></tr>
+<tr><td>Id أو قيمة ثابتة للـ object</td><td><code>{ get; } = Guid.NewGuid();</code></td></tr>
+<tr><td>state بيتغيّر من methods الـ class بس</td><td><code>{ get; private set; }</code></td></tr>
+<tr><td>قيمة مشتقة رخيصة</td><td><code>=&gt; A * B</code></td></tr>
+<tr><td>validation بسيط في set</td><td><code>field</code> (C# 14) أو backing field يدوي</td></tr>
+<tr><td>حاجة غالية أو بتغيّر حالة</td><td>method مش property</td></tr>
+</table></div>
+
+<h3>Constructor Checklist</h3>
+<ol>
+<li>الـ object بعد الـ constructor في حالة <b>صالحة</b> دايمًا؟ (مفيش null أو default غير مقصود)</li>
+<li>المنطق في constructor واحد (master) والباقي بـ <code>: this(...)</code>؟</li>
+<li>مفيش <code>virtual</code> call ولا I/O ولا تسريب لـ <code>this</code> جواه؟</li>
+<li>لو كتبت constructor بـ parameters: هل حد محتاج parameterless (serializer, generics)؟</li>
+<li>لو struct: هل فيه مسار بيعمل <code>default</code> أو array من غير ما ينادي الـ constructor؟</li>
+</ol>
+
+<h3>Encapsulation Checklist (للـ Code Review)</h3>
+<ol>
+<li>هل كود خارجي يقدر يحط الـ object في حالة غير صالحة؟</li>
+<li>هل بنرجّع collection أو object داخلي مباشرة؟ (استخدم <code>IReadOnly...</code> أو wrapper)</li>
+<li>هل <code>set</code> عام محتاجه فعلًا؟ ولا <code>init</code> أو <code>private set</code> أنسب؟</li>
+<li>هل القواعد في الـ class نفسه ولا في الـ controller؟</li>
+<li>هل الـ class thread-safe لو هيتشارك بين threads؟</li>
+<li>هل الـ struct بتاعي immutable؟</li>
+<li>هل بستخدم <code>required</code> و nullable annotations بدل <code>null!</code>؟</li>
+</ol>
+</section>
+
+<!-- ===================== RESOURCES ===================== -->
+<section id="resources">
+<h2>المصادر</h2>
+
+<div class="note cost"><b>ملاحظة عن التحقق</b>
+<p>الروابط دي من معرفتي بالمصادر الرسمية والمشهورة، <b>ومفتحتش كل صفحة منها</b> عند كتابة الملف. Microsoft Learn بتنقل وتعيد ترتيب صفحاتها أحيانًا (فيه صفحات C# اتنقلت لمسارات جديدة)، ومقالات المدونات ممكن تتغير عناوينها. لو رابط مفتحش، ابحث بعنوان الصفحة أو باسم الـ error code. وتأكد من الإصدارات (C# 10/11/12/14) في صفحة "What's new in C#".</p></div>
+
+<h3>Microsoft Learn (المرجع الرسمي)</h3>
+<ul class="res">
+<li><b>Structure types</b> (struct)<br><a class="u" href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/struct" target="_blank" rel="noopener">https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/struct</a></li>
+<li><b>Choosing Between Class and Struct</b> (الـ 16 bytes والـ immutability)<br><a class="u" href="https://learn.microsoft.com/dotnet/standard/design-guidelines/choosing-between-class-and-struct" target="_blank" rel="noopener">https://learn.microsoft.com/dotnet/standard/design-guidelines/choosing-between-class-and-struct</a></li>
+<li><b>Constructors</b><br><a class="u" href="https://learn.microsoft.com/dotnet/csharp/programming-guide/classes-and-structs/constructors" target="_blank" rel="noopener">https://learn.microsoft.com/dotnet/csharp/programming-guide/classes-and-structs/constructors</a></li>
+<li><b>Constructor Design Guidelines</b><br><a class="u" href="https://learn.microsoft.com/dotnet/standard/design-guidelines/constructor" target="_blank" rel="noopener">https://learn.microsoft.com/dotnet/standard/design-guidelines/constructor</a></li>
+<li><b>Properties</b><br><a class="u" href="https://learn.microsoft.com/dotnet/csharp/programming-guide/classes-and-structs/properties" target="_blank" rel="noopener">https://learn.microsoft.com/dotnet/csharp/programming-guide/classes-and-structs/properties</a></li>
+<li><b>Property Design Guidelines</b> (ليه set-only properties ممنوعة)<br><a class="u" href="https://learn.microsoft.com/dotnet/standard/design-guidelines/property" target="_blank" rel="noopener">https://learn.microsoft.com/dotnet/standard/design-guidelines/property</a></li>
+<li><b><code>init</code></b> keyword<br><a class="u" href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/init" target="_blank" rel="noopener">https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/init</a></li>
+<li><b><code>required</code></b> modifier<br><a class="u" href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/required" target="_blank" rel="noopener">https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/required</a></li>
+<li><b>Indexers</b><br><a class="u" href="https://learn.microsoft.com/dotnet/csharp/programming-guide/indexers/" target="_blank" rel="noopener">https://learn.microsoft.com/dotnet/csharp/programming-guide/indexers/</a></li>
+<li><b>Indices and ranges</b> (<code>^1</code> و<code>..</code>)<br><a class="u" href="https://learn.microsoft.com/dotnet/csharp/tutorials/ranges-indexes" target="_blank" rel="noopener">https://learn.microsoft.com/dotnet/csharp/tutorials/ranges-indexes</a></li>
+<li><b>Access modifiers</b><br><a class="u" href="https://learn.microsoft.com/dotnet/csharp/programming-guide/classes-and-structs/access-modifiers" target="_blank" rel="noopener">https://learn.microsoft.com/dotnet/csharp/programming-guide/classes-and-structs/access-modifiers</a></li>
+<li><b>Records</b> (<code>record struct</code>)<br><a class="u" href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/record" target="_blank" rel="noopener">https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/record</a></li>
+<li><b>Boxing and Unboxing</b><br><a class="u" href="https://learn.microsoft.com/dotnet/csharp/programming-guide/types/boxing-and-unboxing" target="_blank" rel="noopener">https://learn.microsoft.com/dotnet/csharp/programming-guide/types/boxing-and-unboxing</a></li>
+<li><b>What's new in C#</b> (تأكد من إصدار كل ميزة)<br><a class="u" href="https://learn.microsoft.com/dotnet/csharp/whats-new/" target="_blank" rel="noopener">https://learn.microsoft.com/dotnet/csharp/whats-new/</a></li>
+<li><b>ابحث بالـ error code</b> في Microsoft Learn: <code>CS1612</code>، <code>CS1654</code>، <code>CS0171</code>، <code>CS0542</code>، <code>CS8983</code>، <code>CS9035</code>، <code>CS8618</code>. كل واحد ليه صفحة شرح.</li>
+</ul>
+
+<h3>الـ Language Design (ليه اللغة اتصممت كده)</h3>
+<ul class="res">
+<li><b>C# language proposals</b> (مستودع csharplang)<small>ابحث جواه عن: "parameterless struct constructors" (C# 10)، "auto-default structs" (C# 11)، "init only setters" (C# 9)، "ranges" (C# 8). الـ proposals بتشرح الأسباب اللي ورا كل قرار.</small><a class="u" href="https://github.com/dotnet/csharplang/tree/main/proposals" target="_blank" rel="noopener">https://github.com/dotnet/csharplang/tree/main/proposals</a></li>
+<li><b>Eric Lippert: The Stack Is An Implementation Detail</b><small>المقال المرجعي اللي بيصحّح مفهوم "الـ value types على الـ stack". (ابحث بالعنوان لو الرابط اتغيّر.)</small><a class="u" href="https://ericlippert.com/2009/04/27/the-stack-is-an-implementation-detail/" target="_blank" rel="noopener">https://ericlippert.com/2009/04/27/the-stack-is-an-implementation-detail/</a></li>
+<li><b>Eric Lippert: Mutating Readonly Structs</b><small>شرح الـ defensive copy وليه الـ mutable structs مشكلة. (ابحث بالعنوان لو الرابط اتغيّر.)</small><a class="u" href="https://ericlippert.com/2008/05/14/mutating-readonly-structs/" target="_blank" rel="noopener">https://ericlippert.com/2008/05/14/mutating-readonly-structs/</a></li>
+</ul>
+
+<h3>أدوات تجرّب بيها بنفسك</h3>
+<ul class="res">
+<li><b>SharpLab</b> (شوف الـ IL وناتج الـ JIT: <code>get_Name</code>، <code>initobj</code>، الـ state machines)<br><a class="u" href="https://sharplab.io" target="_blank" rel="noopener">https://sharplab.io</a></li>
+<li><b>BenchmarkDotNet</b> (قيس قبل ما تقرر struct ولا class)<br><a class="u" href="https://benchmarkdotnet.org" target="_blank" rel="noopener">https://benchmarkdotnet.org</a></li>
+</ul>
+
+<h3>كتب</h3>
+<ul class="res">
+<li><b>Framework Design Guidelines</b>، Cwalina وAbrams<small>أصل قواعد "ما تعملش set-only" و"16 bytes" و"الـ constructor يعمل شغل قليل".</small></li>
+<li><b>CLR via C#</b>، Jeffrey Richter<small>الـ types والـ boxing والـ properties من جوه الـ CLR.</small></li>
+<li><b>C# in Depth</b>، Jon Skeet<small>تاريخ كل ميزة في C# وليه اتضافت.</small></li>
+<li><b>Pro .NET Memory Management</b>، Konrad Kokosa<small>الـ object layout والـ GC، الأساس لكل أرقام القسم 2.</small></li>
+<li><b>Effective C#</b>، Bill Wagner<small>نصائح عملية مرتبطة بالـ properties والـ struct.</small></li>
+<li><b>Domain-Driven Design</b>، Eric Evans<small>الـ Entity مقابل Value Object، وحماية الـ invariants (قسم 4).</small></li>
+</ul>
+</section>
+
+<!-- ===================== NEXT ===================== -->
+<section id="next">
+<h2>الخطوة الجاية: مواضيع تكمّل الصورة</h2>
+<ol>
+<li><b>Inheritance &amp; Polymorphism بعمق:</b> الـ Method Table، الـ virtual dispatch، ليه <code>sealed</code> أسرع أحيانًا، وترتيب الـ constructors (القسم 3.3 كان تمهيد).</li>
+<li><b>Equality في .NET:</b> عقد <code>Equals</code>/<code>GetHashCode</code>/<code>IEquatable&lt;T&gt;</code>، والفرق بين reference وvalue equality، وليه <code>==</code> على الـ string بتشتغل كـ value.</li>
+<li><b>Immutability والـ Records:</b> value equality و<code>with</code> والـ records مقابل الـ classes مقابل الـ structs.</li>
+<li><b>Boxing والـ Memory Layout:</b> <code>StructLayout</code> والـ padding و<code>Unsafe.SizeOf</code> والـ <code>Span&lt;T&gt;</code> وـ<code>ref struct</code>.</li>
+<li><b>Nullable Reference Types:</b> ازاي تحمي نفسك من NullReferenceException بالـ compiler.</li>
+<li><b>Thread-safety وحماية الـ invariants:</b> الـ lock والـ Interlocked والـ immutable collections والـ optimistic concurrency في الـ database.</li>
+</ol>
+<p>قولي أي واحد منهم تحب ننزل فيه بنفس الأسلوب.</p>
+</section>
+
+<footer>
+  آخر تحديث: 28 سبتمبر 2026. مبني على شرايح OOP Session 01. الأكواد تعليمية ومختصرة، وماتجرّبتش على compiler وقت الكتابة: جرّبها بنفسك قبل ما تعتمد عليها.
+</footer>
+
+</main>
+</div>
+</body>
+</html>
